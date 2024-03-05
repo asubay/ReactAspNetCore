@@ -1,0 +1,13 @@
+.grey-container {
+    display: block;
+    background-color: #f2f2f2;
+    width: 100%;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100px;
+}

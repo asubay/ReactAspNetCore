@@ -1,0 +1,2 @@
+# ReactAspNetCore
+for education

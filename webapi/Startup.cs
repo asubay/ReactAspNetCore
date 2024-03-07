@@ -35,6 +35,7 @@ public class Startup
         services.AddEndpointsApiExplorer(); //используется для регистрации сервиса, который предоставляет информацию об обнаруженных конечных точках (endpoints)
         services.AddSwaggerGen();
         services.AddScoped<IWeatherForecastService, WeatherForecastService>(); // Регистрация службы с жизненным циклом Scoped
+        services.AddScoped<IAccidentService, AccidentService>();
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

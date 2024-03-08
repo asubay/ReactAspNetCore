@@ -36,7 +36,7 @@ export default defineConfig({
                 target: 'https://localhost:7140/',
                 secure: false
             },
-            '^/example': {
+            '^/accident': {
                 target: 'https://localhost:7140/',
                 secure: false
             }

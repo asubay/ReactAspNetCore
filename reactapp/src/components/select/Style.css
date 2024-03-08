@@ -9,3 +9,14 @@
     cursor: pointer;
     line-height: 1.1;    
 }
+
+.customMultiselect {
+    width: 100%;
+    min-width: 35ch;
+    max-width: 50ch;
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1.1;
+}

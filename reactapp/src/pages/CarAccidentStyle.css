@@ -1,0 +1,14 @@
+.accident {
+    padding: 24px;
+    margin: 0;    
+    background-color: white;
+}
+
+h1, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebarContent {
+    margin-top: 50px;
+}

@@ -1,19 +1,22 @@
 import React from 'react';
-import {Layout, Sider } from 'antd';
+import { Layout } from 'antd';
+import './Style.css'
 
-const Sidebar = ({colorBgContainer}) => {
-    
+const { Sider } = Layout;
+
+const Sidebar = ({content}) => {    
+  
     return (
-        <div>
-            <Layout>
-                <Sider width={200}
-                       style={{
-                           background: colorBgContainer,
-                       }}>
-                    
-                </Sider>
-            </Layout>
-        </div>
+        <Sider
+            width={400}           
+            style={{
+                padding: 24,
+                background: "rgb(25 55 90)"
+            }}
+        >
+            {content}            
+        </Sider>
+
     );
 };
 

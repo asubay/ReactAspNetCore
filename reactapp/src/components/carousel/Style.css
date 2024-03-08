@@ -1,5 +1,5 @@
 .slide-item {
-    background-image: url("https://openweathermap.org/themes/openweathermap/assets/img/winter6.jpg");
+    background-image: url("https://openweathermap.org/themes/openweathermap/assets/img/spring1.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -12,13 +12,14 @@
 }
 
 .slide-item-1 {
-    background-image: url("https://wallpapercave.com/wp/wp10154430.jpg");
+    background-image: url("https://openweathermap.org/themes/openweathermap/assets/img/spring1.jpg");
 }
 
 .slide-item-2 {
-    background-image: url("https://cdn.pixabay.com/photo/2017/05/20/20/22/clouds-2329680_960_720.jpg");
+    background-image: url("https://openweathermap.org/themes/openweathermap/assets/img/winter6.jpg");
 }
 
 .slide-item-3 {
-    background-image: url("https://openweathermap.org/themes/openweathermap/assets/img/winter6.jpg");
+    background-image: url("https://wallpapercave.com/wp/wp10154430.jpg");
 }
+

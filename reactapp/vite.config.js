@@ -39,6 +39,10 @@ export default defineConfig({
             '^/accident': {
                 target: 'https://localhost:7140/',
                 secure: false
+            }            ,
+            '^/accidentyears': {
+                target: 'https://localhost:7140/',
+                secure: false
             }
         },
         port: 5173,

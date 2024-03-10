@@ -15,7 +15,7 @@ public class AccidentController : ControllerBase
     }
 
     [HttpGet(Name = "GetAccidentData")]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetAccidentData()
     {
         string path = await _service.GetAccidentDataPath();
         if (!string.IsNullOrEmpty(path)) {

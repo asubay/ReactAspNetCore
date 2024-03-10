@@ -21,14 +21,5 @@ public class WeatherForecastController : ControllerBase
     public async Task<WeatherForecastViewModel> Get(string cityId="1520316")
     {
         return await _service.GetWeatherForecast(cityId);
-         
-        // return new WeatherForecastViewModel
-        // {
-        //     Country = "KZ",
-        //     Name = "Y-Ka",
-        //     Timezone = "UTS + 6",
-        //     Lat = 49.966701,
-        //     Lon = 82.616699
-        // };
     }
 }

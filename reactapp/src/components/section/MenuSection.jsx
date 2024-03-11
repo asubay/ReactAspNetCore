@@ -28,9 +28,7 @@ const MenuSection = () => {
         <div>
             <Menu
                 mode="inline"
-                style={{                    
-                    background: "rgb(25 55 90)"
-                }}
+                theme="dark"
                 defaultSelectedKeys={['1']}
                 items={items}
                 selectedKeys={[]}

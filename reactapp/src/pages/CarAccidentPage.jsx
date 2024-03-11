@@ -107,9 +107,10 @@ const CarAccidentPage = () => {
         .sort((a, b) => b[1].length - a[1].length)
 
     return (
-        <div>
-            <Layout>                
-               <Sidebar content={                   
+        <>
+            <Layout hasSider>             
+               <Sidebar 
+                   content={                   
                    <div>
                       <MenuSection/>
                        <hr style={{color:"white"}}/>
@@ -123,8 +124,13 @@ const CarAccidentPage = () => {
                        </div>                        
                    </div>
                }
-               />               
-                <Content className="accident">
+               />
+                <Layout
+                    style={{
+                        marginLeft: 400,                        
+                    }}
+                > 
+                    <Content className="accident">
                     <h1>Анализ ДТП по городу Усть-Каменогорск</h1>
                     <div className="mt-3">
                         <AccidentTable accidents={accident}></AccidentTable>
@@ -178,12 +184,13 @@ const CarAccidentPage = () => {
                         zoom={11}
                         coordinates={mapData}
                     />
-                </Content>               
+                </Content>       
+                </Layout>    
             </Layout>
             <Layout>
                 <FooterSection/>
             </Layout>
-        </div>        
+        </>        
     );
 };
 

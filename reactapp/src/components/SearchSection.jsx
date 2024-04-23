@@ -1,12 +1,12 @@
 import React from 'react';
-import MySelect from "@/components/select/MySelect.jsx";
+import Select from "@/components/common/selects/Select.jsx";
 
 const SearchSection = ({ handleCityChange, selectedCity, selectedCityName }) => {
     return (
-        <div className="grey-container">
+        <div className="search-container">
             <div className="search">
                 <label>Выберите город:</label>
-                <MySelect
+                <Select
                     value={{ value: selectedCity, label: selectedCityName }}
                     onChange={(value, selectedOption) => handleCityChange(value, selectedOption)}
                     options={[
@@ -15,7 +15,7 @@ const SearchSection = ({ handleCityChange, selectedCity, selectedCityName }) => 
                         { value: "1526273", name: "Astana" },
                         { value: "1526384", name: "Almaty" },
                     ]}>
-                </MySelect>
+                </Select>
             </div>
         </div>
     );

@@ -53,15 +53,15 @@ const ForecastTable = ({ forecasts }) => {
     };
     
     return (
-        <div>
+        <>
             <Table
                 dataSource={forecasts}
                 columns={columns}
                 pagination={paginationOptions}
                 bordered
-                rowKey="dateTime"                
+                rowKey="dateTime" 
             />
-        </div>        
+        </>        
     );
 };
 

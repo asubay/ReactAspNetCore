@@ -1,6 +1,5 @@
 import React from 'react';
 import { Layout } from 'antd';
-import './Style.css'
 
 const { Sider } = Layout;
 
@@ -8,7 +7,7 @@ const Sidebar = ({content}) => {
   
     return (
         <Sider
-            width={400}
+            width={300}
             style={{
                 overflow: 'auto',
                 height: '100vh',

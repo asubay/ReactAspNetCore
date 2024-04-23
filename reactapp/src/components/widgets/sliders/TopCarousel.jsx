@@ -1,6 +1,6 @@
 import React from 'react';
 import { Carousel } from 'antd';
-import './Style.css'
+import "@/components/widgets/styles/Style.css"
 
 const TopCarousel = () => {
     return (

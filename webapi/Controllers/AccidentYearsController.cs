@@ -7,7 +7,8 @@ namespace webapi.Controllers;
 [Route("[controller]")]
 public class AccidentYearsController : ControllerBase
 {
-    [HttpGet(Name = "GetYearsList")]
+    [HttpGet]
+    [ProducesResponseType(typeof(List<CustomSelectResponse>), 200)]
     public async Task<List<CustomSelectResponse>> GetYearsList()
     {
         var years = new List<CustomSelectResponse>();

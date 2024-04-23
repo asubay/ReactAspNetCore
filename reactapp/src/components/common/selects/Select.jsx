@@ -1,10 +1,10 @@
 import React from 'react';
 import { Select } from 'antd';
-import "./Style.css"
+import "@/components/common/style/Style.css"
 
 const { Option } = Select;
 
-const MySelect = ({ options, value, onChange }) => {
+const Select2 = ({ options, value, onChange }) => {
     return (
         <Select
             showSearch
@@ -21,4 +21,4 @@ const MySelect = ({ options, value, onChange }) => {
     );
 };
 
-export default MySelect;
+export default Select2;

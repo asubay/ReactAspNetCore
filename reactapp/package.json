@@ -13,6 +13,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
     "antd": "^5.14.1",
+    "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
     "leaflet": "^1.9.4",
     "leaflet.heat": "^0.2.0",

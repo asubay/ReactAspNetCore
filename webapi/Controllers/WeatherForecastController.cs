@@ -17,7 +17,7 @@ public class WeatherForecastController : ControllerBase
         _service = service;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet]
     public async Task<WeatherForecastViewModel> Get(string cityId="1520316")
     {
         return await _service.GetWeatherForecast(cityId);

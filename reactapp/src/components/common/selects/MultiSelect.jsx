@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 
-const CustomMultiSelect = ({placeholder, handleChange, options}) => {
+const MultiSelect = ({placeholder, handleChange, options}) => {
     return (
         <Select
             mode="multiple"            
@@ -13,4 +13,4 @@ const CustomMultiSelect = ({placeholder, handleChange, options}) => {
     );
 };
 
-export default CustomMultiSelect;
+export default MultiSelect;

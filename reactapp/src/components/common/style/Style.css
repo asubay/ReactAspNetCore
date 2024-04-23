@@ -1,4 +1,27 @@
-.myButton {
+.customSelect {  
+    height: 45px;
+    width: 100%;
+    min-width: 40ch;
+    max-width: 60ch;
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1.1;    
+}
+
+.customMultiselect {
+    width: 100%;
+    min-width: 35ch;
+    max-width: 50ch;
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1.1;
+}
+
+.customBtn {
     color: #fff;
     padding: 8px 25px;
     background-color: #38D2D2;

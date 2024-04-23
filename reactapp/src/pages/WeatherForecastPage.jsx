@@ -1,32 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ForecastTable from "@/components/table/ForecastTable.jsx";
-import TopCarousel from "@/components/carousel/TopCarousel.jsx";
-import LeafletMap from "@/components/map/LeafletMap.jsx";
-import TemperatureChart from "@/components/chart/TemperatureChart.jsx";
-import HumidityChart from "@/components/chart/HumidityChart.jsx";
+import ForecastTable from "@/components/widgets/tables/ForecastTable.jsx";
+import TopCarousel from "@/components/widgets/sliders/TopCarousel.jsx";
+import LeafletMap from "@/components/widgets/maps/LeafletMap.jsx";
+import TemperatureChart from "@/components/widgets/charts/TemperatureChart.jsx";
+import HumidityChart from "@/components/widgets/charts/HumidityChart.jsx";
 import WeatherIcon from "@/components/icon/WeatherIcon.jsx";
 import { Spin, Layout } from 'antd';
-import SearchSection from "@/components/section/SearchSection.jsx";
+import SearchSection from "@/components/SearchSection.jsx";
 import {Link} from "react-router-dom";
-import FooterSection from "@/components/section/FooterSection.jsx";
+import FooterSection from "@/components/layout/Footer.jsx";
+import { fetchForecasts } from "@/services/api.js"
+import MenuSection from "@/components/layout/Menu.jsx";
+import Sidebar from "@/components/layout/Sidebar.jsx";
+import HeaderSection from "@/components/layout/Header.jsx";
 
 const { Content } = Layout;
 
-const  WeatherForecastPage= () => {
+const  WeatherForecastPage = () => {
     const [forecasts, setForecasts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [weatherData, setWeatherData] = useState({
         selectedCity: '',
         selectedCityName: ''
     });
-
+        
     useEffect(() => {
-        const fetchForecasts = async () => {
+        
+        const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`weatherforecast?cityId=${weatherData.selectedCity}`);
-                const data = await response.json();
+                const data = await fetchForecasts(weatherData.selectedCity);
                 setForecasts(data);
             } catch (error) {
                 console.error('Error fetching forecasts:', error);
@@ -35,7 +39,7 @@ const  WeatherForecastPage= () => {
             }
         };
 
-        fetchForecasts();
+        fetchData();
     }, [weatherData.selectedCity]);
 
     const handleCityChange = (value, selectedOption) => {
@@ -43,7 +47,7 @@ const  WeatherForecastPage= () => {
             ...prevState,
             selectedCity: value,
             selectedCityName: selectedOption ? selectedOption.label : ''
-        }));
+        }));        
     };
 
     if (loading && forecasts.length === 0) {
@@ -62,53 +66,66 @@ const  WeatherForecastPage= () => {
     const selectedHumidityData = forecasts.params.slice(0, 6).map(item => ({
         time: item.time,
         temperature: item.humidity
-    }));
+    }));    
+   
 
     return (
-        <Spin spinning={loading}>
-            <TopCarousel />
-            <SearchSection
-                handleCityChange={handleCityChange}
-                selectedCityName={weatherData.selectedCityName}
-                selectedCity={ weatherData.selectedCity }
-            />
-            <div className="container-fluid">
-                <div className="row mt-3">
-                    <div className="col-sm-6">
-                        <h3>Прогноз погоды на ближайшие 5 дней</h3>
-                        <ForecastTable forecasts={forecasts.params}></ForecastTable>
-                    </div>
-                    <div className="col-sm-6">
-                        <div>
-                            <h3>{forecasts.name}, {forecasts.country}</h3><br/>
-                            <WeatherIcon temperature={forecasts.params[0].temperature} />
-                            <p><strong>Восход солнца:</strong> {forecasts.sunrise}</p>
-                            <p><strong>Закат солнца:</strong> {forecasts.sunset}</p>
-                            {forecasts.id === 1520316 ? (
-                                <Link to="/yka-car-accident">Перейти к статистике ДТП</Link>
-                            ) : (
-                                <p><strong>Часовой пояс:</strong> {forecasts.timezone}</p>
-                            )}
-                        </div>
-                        <div className="leaflet-container">
-                            <LeafletMap center={[forecasts.lat, forecasts.lon]} zoom={13} />
-                        </div>
-                        <div className="row mt-3">
-                            <strong><h3>Почасовой прогноз</h3></strong>
-                            <div className="col-sm-6">
-                                <TemperatureChart data={ selectedTemperatureData }/>
-                            </div>
-                            <div className="col-sm-6">
-                                <HumidityChart data={ selectedHumidityData }/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <Spin spinning={loading}>      
             <Layout>
-                <FooterSection/>
-            </Layout>
-        </Spin>       
+                <HeaderSection/>    
+                <Layout>
+                    <Sidebar
+                        content={
+                            <MenuSection theme={"dark"}/>
+                        }
+                    /> 
+                    <Layout style={{
+                        marginLeft: 300                        
+                    }}>
+                        <Content>
+                            <TopCarousel />
+                            <SearchSection
+                                handleCityChange={handleCityChange}
+                                selectedCityName={weatherData.selectedCityName}
+                                selectedCity={ weatherData.selectedCity }
+                            />
+                            <div className="container-fluid">
+                                <div className="row mt-3">
+                                    <div className="col-sm-6">
+                                        <h3>Прогноз погоды на ближайшие 5 дней</h3>
+                                        <ForecastTable forecasts={forecasts.params}></ForecastTable>
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <div>
+                                            <h3>{forecasts.name}, {forecasts.country}</h3><br/>
+                                            <WeatherIcon temperature={forecasts.params[0].temperature} />
+                                            <p><strong>Восход солнца:</strong> {forecasts.sunrise}</p>
+                                            <p><strong>Закат солнца:</strong> {forecasts.sunset}</p>
+                                            <Link to={`/yka-car-accident/${forecasts.id}`}>
+                                                Перейти к статистике ДТП
+                                            </Link>
+                                        </div>
+                                        <div className="leaflet-container">
+                                            <LeafletMap center={[forecasts.lat, forecasts.lon]} zoom={13} />
+                                        </div>
+                                        <div className="row mt-3">
+                                            <strong><h3>Почасовой прогноз</h3></strong>
+                                            <div className="col-sm-6">
+                                                <TemperatureChart data={ selectedTemperatureData }/>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <HumidityChart data={ selectedHumidityData }/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </Content>
+                        <FooterSection/>                        
+                    </Layout>                    
+                </Layout>                
+            </Layout> 
+        </Spin>  
     );
 }
 

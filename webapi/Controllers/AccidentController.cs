@@ -14,7 +14,7 @@ public class AccidentController : ControllerBase
         _service = service;
     }
 
-    [HttpGet(Name = "GetAccidentData")]
+    [HttpGet]
     public async Task<IActionResult> GetAccidentData()
     {
         string path = await _service.GetAccidentDataPath();

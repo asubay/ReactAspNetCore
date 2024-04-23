@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
 import { Layout } from 'antd';
-import AccidentTable from "@/components/table/AccidentTable.jsx";
-import "./CarAccidentStyle.css"
-import Sidebar from "@/components/sidebar/Sidebar.jsx";
-import CustomMultiSelect from "@/components/select/CustomMultiSelect.jsx";
-import FooterSection from "@/components/section/FooterSection.jsx";
-import MenuSection from "@/components/section/MenuSection.jsx";
-import OffenceBar from "@/components/chart/OffenceBar.jsx";
-import KindPieChart from "@/components/chart/KindPieChart.jsx";
-import HeatingMap from "@/components/map/HeatingMap.jsx";
-import LineChart from "@/components/chart/LineChart.jsx";
+import AccidentTable from "@/components/widgets/tables/AccidentTable.jsx";
+import "@/pages/styles/Style.css"
+import Sidebar from "@/components/layout/Sidebar.jsx";
+import CustomMultiSelect from "@/components/common/selects/MultiSelect.jsx";
+import FooterSection from "@/components/layout/Footer.jsx";
+import MenuSection from "@/components/layout/Menu.jsx";
+import OffenceBar from "@/components/widgets/charts/OffenceBar.jsx";
+import KindPieChart from "@/components/widgets/charts/KindPieChart.jsx";
+import HeatingMap from "@/components/widgets/maps/HeatingMap.jsx";
+import LineChart from "@/components/widgets/charts/LineChart.jsx";
+import { fetchAccident } from "@/services/api.js"
 
 const { Content } = Layout;
 
@@ -36,12 +37,11 @@ const CarAccidentPage = () => {
     };
 
     useEffect(() => { 
-        const fetchAccident = async () => {
+        const fetchAccidentData = async () => {
             
             setLoading(true);
             try {
-                const response = await fetch(`accident`);
-                const data = await response.json();
+                const data = await fetchAccident();                
                 
                 if (selectedYears.length>0){
                     let yearsParam = selectedYears.join(',');
@@ -58,7 +58,7 @@ const CarAccidentPage = () => {
             }
         };
 
-        fetchAccident();
+        fetchAccidentData();
     }, [selectedYears]);
 
     useEffect(() => {
@@ -112,22 +112,24 @@ const CarAccidentPage = () => {
                <Sidebar 
                    content={                   
                    <div>
-                      <MenuSection/>
+                      <MenuSection theme={"dark"}/>
                        <hr style={{color:"white"}}/>
                        <div className="sidebarContent">
-                           <h5>Выберите года:</h5>
-                           <CustomMultiSelect
-                               options={years}
-                               placeholder="Выберите"
-                               handleChange={handleChange}
-                           />
+                           <div className="form-group">
+                               <h5 style={{color:"white"}}>Выберите года:</h5>
+                               <CustomMultiSelect
+                                   options={years}
+                                   placeholder="Выберите"
+                                   handleChange={handleChange}
+                               />
+                           </div>
                        </div>                        
                    </div>
                }
-               />
+               />                
                 <Layout
                     style={{
-                        marginLeft: 400,                        
+                        marginLeft: 300,                        
                     }}
                 > 
                     <Content className="accident">

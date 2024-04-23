@@ -18,8 +18,7 @@ public class WeatherForecastService : IWeatherForecastService
         var apiToken = section.GetValue<string>("ApiKey");
         var apiAddress = section.GetValue<string>("ApiUrl");
         string urlString = $"{apiAddress}/forecast?id={cityId}&units=metric&lang=ru&appid={apiToken}";
-                           
-        
+
         using (HttpClient client = new HttpClient())
         {
             try

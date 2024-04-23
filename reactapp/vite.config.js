@@ -39,9 +39,13 @@ export default defineConfig({
             '^/accident': {
                 target: 'https://localhost:7140/',
                 secure: false
-            }            ,
+            },
             '^/accidentyears': {
                 target: 'https://localhost:7140/',
+                secure: false
+            },
+            '^/api/auth/login': {
+                target: 'https://localhost:7140',
                 secure: false
             }
         },

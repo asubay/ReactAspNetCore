@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace webapi.models;
 
 public class WeatherForecast

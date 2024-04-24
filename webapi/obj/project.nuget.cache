@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6GSid/qy7dftHOJDpxO15tWrjC35XPrrZxWpvRUPrFyopN1wCNlKbE7KuS5C1Hts7DrthPRlgFtxxCMV/WivYQ==",
+  "dgSpecHash": "wZaEdeR9bFNsvUuwlYGHkJJmB1J+swJUaHg5xwI7wlj8Xiwn9d8Sb7oGgk6dblqFvZ6iIwih2NHpCzBfJsve8w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\erkez\\source\\repos\\ReactDotNet\\webapi\\webapi.csproj",
+  "projectFilePath": "F:\\Education\\final_project\\ReactAspNetCore\\webapi\\webapi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erkez\\.nuget\\packages\\audit.entityframework.core\\20.1.0\\audit.entityframework.core.20.1.0.nupkg.sha512",
     "C:\\Users\\erkez\\.nuget\\packages\\audit.entityframework.identity.core\\20.1.0\\audit.entityframework.identity.core.20.1.0.nupkg.sha512",

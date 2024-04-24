@@ -16,8 +16,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem("site");
         if (token) {
             setIsAuthenticated(true);
-            // Здесь допиши выполнить запрос к серверу для получения данных о пользователе
-            // и установить соответствующее состояние для пользователя
+            // Здесь допиши выполнить запрос к серверу для получения данных о пользователе           
         }
     }, []);
 
@@ -26,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await fetchLogin(data);
             setIsAuthenticated(true);
-            setUser(response.userName);
+            setUser(response);
             setToken(response.token);
             localStorage.setItem("site", response.token);
             navigate("/");

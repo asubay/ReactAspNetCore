@@ -47,6 +47,10 @@ export default defineConfig({
             '^/api/auth/login': {
                 target: 'https://localhost:7140',
                 secure: false
+            },
+            '^/role/GetRoles': {
+                target: 'https://localhost:7140',
+                secure: false
             }
         },
         port: 5173,

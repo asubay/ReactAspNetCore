@@ -42,3 +42,13 @@ export const fetchLogin = async (data) =>  {
         throw new Error('Ошибка авторизации: неверные учетные данные');
     } 
 };
+
+export const fetchGetRoles = async () => {
+    try {        
+        const response = await api.get(`/role/GetRoles`);        
+        return response.data;
+    } catch (error) {
+        console.error('Error fetch Accident:', error);
+        throw error;
+    }
+};

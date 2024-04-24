@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const HeaderSection = () => {
     const { isAuthenticated, logout, user } = useAuth();
-    const navigate = useNavigate();
+    const navigate = useNavigate();    
     
     const handleLogout = () => {        
         logout(isAuthenticated);
@@ -41,7 +41,7 @@ const HeaderSection = () => {
                 {isAuthenticated ? (
                     <>
                         <Col style={{ textAlign: 'right', marginLeft: 25 }}>
-                            Welcome, {user}
+                            Welcome, {user.userName}
                         </Col>
                         <Col>
                             <div
@@ -58,8 +58,9 @@ const HeaderSection = () => {
                                 }}
                             >
                                 <UserOutlined />
-                            </div>
-                        </Col>                        
+                                
+                            </div>                            
+                        </Col>                          
                         <Col>
                             <Button onClick={handleLogout}>Выйти</Button>
                         </Col>

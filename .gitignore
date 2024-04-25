@@ -3,3 +3,4 @@
 /webapi/obj
 /reactapp/obj
 /reactapp/package-lock.json
+/.vs/ReactAspNetCore/FileContentIndex/*.vsidx

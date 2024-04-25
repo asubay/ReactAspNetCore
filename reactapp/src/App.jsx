@@ -13,8 +13,7 @@ function App() {
                 <AuthProvider>
                     <Routes>
                         <Route path="/login" element={<Login />} />
-                        <Route path="/" element={<WeatherForecastPage />} />
-                        
+                        <Route path="/" element={<WeatherForecastPage />} />                        
                         <Route element={<PrivateRoute />}>
                             <Route path="/yka-car-accident/:id" element={<CarAccidentPage />} />
                         </Route>

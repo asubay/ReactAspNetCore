@@ -1,2 +1,0 @@
-C:\Users\erkez\source\repos\ReactDotNet\reactapp\obj\Debug\reactapp.esproj.CoreCompileInputs.cache
-F:\Education\final_project\ReactAspNetCore\reactapp\obj\Debug\reactapp.esproj.CoreCompileInputs.cache

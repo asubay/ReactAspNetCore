@@ -1,0 +1,5 @@
+/webapi/appsettings.json
+/webapi/bin
+/webapi/obj
+/reactapp/obj
+/reactapp/package-lock.json

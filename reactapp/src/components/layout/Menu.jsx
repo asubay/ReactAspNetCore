@@ -29,8 +29,8 @@ const MenuSection = ({theme}) => {
             'admin',
             <Icons.SettingOutlined className="icon"/>,
             [getItem(
-                <a href="yka-car-accident" target="_blank" rel="noopener noreferrer" className="link">
-                    Пользователи
+                <a href="/role" rel="noopener noreferrer" className="link">
+                    Роли
                 </a>,
                 'users',
                 <Icons.UserOutlined className="icon"/>),]

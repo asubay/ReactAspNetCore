@@ -33,25 +33,63 @@ public class UserController : ControllerBase
         return users;
     }
 
+    [HttpPost("EditUser")]
     public async Task<IActionResult> Edit(CreateUserViewModel model)
     {
         if (ModelState.IsValid)
         {
-            var user = await _userManager.FindByNameAsync(model.Login);
-            if (user == null)
-            {
-                var row = new IdentityUser
-                {
-                    UserName = model.Login,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    NormalizedUserName = model.Name,
+            var user = await _userManager.FindByNameAsync(model.Username);
+            var isNewUser = user == null;
+            user.Email = model.Email;
+            user.UserName = model.Username;
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+            user.NormalizedUserName = model.Name;
+            if (!model.IsActive) {
+                user.LockoutEnd = DateTimeOffset.MaxValue;
+            } else {
+                user.LockoutEnd = null;
+            }
+            var result = isNewUser
+                ? await _userManager.CreateAsync(user)
+                : await _userManager.UpdateAsync(user);
+            if (result.Succeeded) {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-                };
-                _db.Users.Add(new IdentityUser());
-                
+                result = await _userManager.AddToRolesAsync(user, model.Role);
+                if (result.Succeeded) {
+                    if (isNewUser) {
+                        result = await _userManager.AddPasswordAsync(user, model.Password);
+                    } else if ((model.Password ?? "") != "") {
+                        result = await _userManager.ResetPasswordAsync(user,
+                            _userManager.GeneratePasswordResetTokenAsync(user).Result, model.Password);
+                    }
+                    if (result.Succeeded) {
+                        return Ok();
+                    }
+                }
             }
         }
-        return Ok();
+        return BadRequest("Заполните все обязательные поля!");
+    }
+    
+    [HttpGet("GetUser")]
+    public async Task<CreateUserViewModel> Edit(string id) {
+        var user = string.IsNullOrEmpty(id)
+            ? new IdentityUser()
+            : await _userManager.FindByIdAsync(id);
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var model = new CreateUserViewModel {
+            Id = Guid.Parse(user.Id),
+            Email = user.Email,
+            Username = user.UserName,
+            Role = userRoles.ToArray(),
+            IsActive = user.LockoutEnd == null,
+            Name = user.NormalizedUserName,
+            PhoneNumber = user.PhoneNumber,
+        };
+        return model;
     }
 }

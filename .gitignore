@@ -4,3 +4,6 @@
 /reactapp/obj
 /reactapp/package-lock.json
 /.vs/ReactAspNetCore/FileContentIndex/*.vsidx
+/.idea
+/webapi/publish
+/webapi/forecast_deploy.sh

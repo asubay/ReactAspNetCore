@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Layout, Button } from 'antd';
 const { Header } = Layout;
-import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import {useAuth} from "@/components/contexts/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 

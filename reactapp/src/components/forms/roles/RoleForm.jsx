@@ -66,12 +66,11 @@ const RoleForm = () => {
                                 {
                                     <h3 style={{textAlign: "left"}}>
                                         {recordId ? ("Редактирование"): ("Добавление новой роли")}
-                                    </h3>
-                                    
+                                    </h3>                                    
                                 }
                                 <hr/>
                             </div>
-                            <Row justify="center" align="middle" >
+                            <Row justify="center" align="middle">
                                 <div className="col-6 mt-4">
                                     <Form
                                         form={form}

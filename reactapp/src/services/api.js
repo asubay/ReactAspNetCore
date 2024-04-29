@@ -54,8 +54,7 @@ export const fetchGetRoles = async () => {
 };
 
 export const editRole = async (data) =>  {
-    try {
-        console.log(data)
+    try {        
         const response = await axios.post('/role/EditRole', {
             id: data.id,
             name: data.name,
@@ -75,7 +74,36 @@ export const getRole = async (id) => {
         });
         return response.data;
     } catch (error) {
-        console.error('Error get role:', error);
+        console.error('Error while getting role:', error);
+        throw error;
+    }
+};
+
+export const fetchGetUsers= async () => {
+    try {
+        const response = await api.get(`/user/GetUsersList`);
+        return response.data;
+    } catch (error) {
+        console.error('Error while fetching user list:', error);
+        throw error;
+    }
+};
+
+export const saveUserData = async (userData) => {
+    
+    try {
+        const response = await axios.post('/user/EditUser', {
+            id: userData.id,
+            username: userData.username,           
+            email: userData.email,
+            phoneNumber: userData.phoneNumber,
+            password: userData.password,
+            isActive: userData.isActive,
+            role: userData.role
+        });       
+        return response.data; 
+    } catch (error) {
+        console.error('Error while saving user data:', error);
         throw error;
     }
 };

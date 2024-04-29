@@ -1,6 +1,5 @@
-import * as Icons from "@ant-design/icons";
 import { Menu, Layout } from 'antd';
-
+import { TrademarkOutlined, UserOutlined, SettingOutlined, LinkOutlined } from '@ant-design/icons';
 
 const MenuSection = ({theme}) => {
     const { Sider } = Layout;
@@ -20,20 +19,28 @@ const MenuSection = ({theme}) => {
                 Главная
             </a>,
             'home',
-            <Icons.LinkOutlined className="icon"/>,
+            <LinkOutlined className="icon"/>,
         ),
         getItem(
             <a href="/" target="_blank" rel="noopener noreferrer" className="link">
                 Администрирование
             </a>,
-            'admin',
-            <Icons.SettingOutlined className="icon"/>,
-            [getItem(
+            'administration',
+            <SettingOutlined className="icon"/>,
+            [
+                getItem(
                 <a href="/role" rel="noopener noreferrer" className="link">
                     Роли
-                </a>,
-                'users',
-                <Icons.UserOutlined className="icon"/>),]
+                </a>, 
+                'role',
+                <TrademarkOutlined className="icon"/>),
+                getItem(
+                    <a href="/user" rel="noopener noreferrer" className="link">
+                        Пользователи
+                    </a>,
+                    'user',
+                    <UserOutlined className="icon"/>)
+            ]
         )
     ];
     

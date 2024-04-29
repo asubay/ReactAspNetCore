@@ -59,6 +59,18 @@ export default defineConfig({
             '^/role/GetRole': {
                 target: 'https://localhost:7140',
                 secure: false
+            },
+            '^/user/GetUser': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/user/EditUser': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/user/GetUsersList': {
+                target: 'https://localhost:7140',
+                secure: false
             }
         },
         port: 5173,

@@ -18,13 +18,12 @@ public class UserController : ControllerBase
         _userManager = userManager;
     }
     
-    [HttpGet("GetUsers")]
+    [HttpGet("GetUsersList")]
     public async Task<List<UserViewModel>> GetUserList()
     {
         var users = _db.Users.Select(s => new UserViewModel
         {
             Id = s.Id,
-            Name = s.NormalizedEmail,
             Login = s.UserName,
             Email = s.Email,
             PhoneNumber = s.PhoneNumber
@@ -39,12 +38,16 @@ public class UserController : ControllerBase
         if (ModelState.IsValid)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
-            var isNewUser = user == null;
+            bool isNewUser = user == null;
+            
+            if (isNewUser) {
+                user = new IdentityUser(model.Username);
+            }
+
             user.Email = model.Email;
             user.UserName = model.Username;
             user.Email = model.Email;
             user.PhoneNumber = model.PhoneNumber;
-            user.NormalizedUserName = model.Name;
             if (!model.IsActive) {
                 user.LockoutEnd = DateTimeOffset.MaxValue;
             } else {
@@ -56,8 +59,10 @@ public class UserController : ControllerBase
             if (result.Succeeded) {
                 var currentRoles = await _userManager.GetRolesAsync(user);
                 await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                var roles = new List<string>();
+                roles.Add(model.Role);
 
-                result = await _userManager.AddToRolesAsync(user, model.Role);
+                result = await _userManager.AddToRolesAsync(user, roles);
                 if (result.Succeeded) {
                     if (isNewUser) {
                         result = await _userManager.AddPasswordAsync(user, model.Password);
@@ -75,19 +80,18 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("GetUser")]
-    public async Task<CreateUserViewModel> Edit(string id) {
+    public async Task<CreateUserViewModel> Get(string id) {
         var user = string.IsNullOrEmpty(id)
             ? new IdentityUser()
             : await _userManager.FindByIdAsync(id);
         var userRoles = await _userManager.GetRolesAsync(user);
 
         var model = new CreateUserViewModel {
-            Id = Guid.Parse(user.Id),
+            Id = user.Id,
             Email = user.Email,
             Username = user.UserName,
-            Role = userRoles.ToArray(),
+            Role = userRoles[0],
             IsActive = user.LockoutEnd == null,
-            Name = user.NormalizedUserName,
             PhoneNumber = user.PhoneNumber,
         };
         return model;

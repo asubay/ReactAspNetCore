@@ -33,6 +33,7 @@ public class UserController : ControllerBase
         return users;
     }
 
+    [HttpPost("EditUser")]
     public async Task<IActionResult> Edit(CreateUserViewModel model)
     {
         if (ModelState.IsValid)
@@ -49,7 +50,6 @@ public class UserController : ControllerBase
 
                 };
                 _db.Users.Add(new IdentityUser());
-                
             }
         }
         return Ok();

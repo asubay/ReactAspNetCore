@@ -15,8 +15,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem("site");
         if (token) {
-            setIsAuthenticated(true);
-            // Здесь допиши выполнить запрос к серверу для получения данных о пользователе           
+            setIsAuthenticated(true);            
         }
     }, []);
 

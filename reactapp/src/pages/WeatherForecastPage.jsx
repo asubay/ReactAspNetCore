@@ -10,7 +10,7 @@ import { Spin, Layout } from 'antd';
 import SearchSection from "@/components/SearchSection.jsx";
 import {Link} from "react-router-dom";
 import FooterSection from "@/components/layout/Footer.jsx";
-import {fetchForecasts, fetchGetRoles} from "@/services/api.js"
+import {fetchForecasts} from "@/services/api.js"
 import MenuSection from "@/components/layout/Menu.jsx";
 import Sidebar from "@/components/layout/Sidebar.jsx";
 import HeaderSection from "@/components/layout/Header.jsx";
@@ -39,24 +39,7 @@ const  WeatherForecastPage = () => {
         };
 
         fetchData();
-    }, [weatherData.selectedCity]);
-    
-    useEffect(()=>
-    {
-        const fetchRolesList = async () => {
-            try {
-                const data = await fetchGetRoles();
-                
-            } catch (error) {
-                console.error('Error fetching accident years:', error);
-            }
-            finally {
-                console.log('Success');
-            }
-        };
-        fetchRolesList();
-        
-    }, [])
+    }, [weatherData.selectedCity]);  
 
     const handleCityChange = (value, selectedOption) => {
         setWeatherData(prevState => ({

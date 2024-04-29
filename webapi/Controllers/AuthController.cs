@@ -4,7 +4,7 @@ using webapi.Models;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("api/auth")]
+[Route("auth")]
 public class AuthController : ControllerBase
 {
     [HttpPost("login")]

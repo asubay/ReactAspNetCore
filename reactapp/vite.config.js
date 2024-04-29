@@ -44,11 +44,31 @@ export default defineConfig({
                 target: 'https://localhost:7140/',
                 secure: false
             },
-            '^/api/auth/login': {
+            '^/auth/login': {
                 target: 'https://localhost:7140',
                 secure: false
             },
-            '^/role/GetRoles': {
+            '^/role/GetRoleList': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/role/EditRole': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/role/GetRole': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/user/GetUser': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/user/EditUser': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/user/GetUsersList': {
                 target: 'https://localhost:7140',
                 secure: false
             }

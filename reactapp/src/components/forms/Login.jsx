@@ -1,5 +1,5 @@
 import {useAuth} from "@/components/contexts/AuthContext.jsx";
-import { Button, Checkbox, Form, Input, Row, Col, Alert } from 'antd';
+import { Button, Form, Input, Row, Col, Alert } from 'antd';
 import React, { useState } from 'react';
 
 const Login = () => {

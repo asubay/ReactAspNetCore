@@ -51,7 +51,7 @@ public class RoleController : ControllerBase
                 return Ok();
             }
         }
-        return BadRequest("Заполните все обязательные поля!");
+        return BadRequest("Error while saving data!");
     }
     
     [HttpGet("GetRole")]

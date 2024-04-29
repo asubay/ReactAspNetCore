@@ -22,7 +22,7 @@ export const fetchForecasts = async (cityId) => {
 
 export const fetchAccident = async () => {
     try {
-        const response = await api.get(`/accident`);
+        const response = await api.get(`/accident/GetAccidentData`);
         return response.data;
     } catch (error) {
         console.error('Error fetch Accident:', error);
@@ -104,6 +104,20 @@ export const saveUserData = async (userData) => {
         return response.data; 
     } catch (error) {
         console.error('Error while saving user data:', error);
+        throw error;
+    }
+};
+
+export const getUser = async (id) => {
+    try {
+        const response = await api.get(`/user/GetUser`, {
+            params: {
+                id: id
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error while getting user:', error);
         throw error;
     }
 };

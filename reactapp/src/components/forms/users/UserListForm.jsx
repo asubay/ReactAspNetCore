@@ -61,13 +61,7 @@ const UserListForm = () => {
             dataIndex: 'login',
             key: 'login',
             align: 'Left',
-        },
-        {
-            title: 'Имя',
-            dataIndex: 'name',
-            key: 'name',
-            align: 'Left',
-        },
+        },        
         {
             title: 'Email',
             dataIndex: 'email',
@@ -116,10 +110,8 @@ const UserListForm = () => {
                     }
                 />
             </Layout>
-            <Layout style={{
-                marginLeft: 300,
-            }}>
-                <Content>
+            <Layout className="layoutStyle">
+                <Content className="listContentStyle">
                     <div className="container-fluid">
                         <div className="row mt-3">
                             <div className="form-group">

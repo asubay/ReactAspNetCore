@@ -36,11 +36,11 @@ export default defineConfig({
                 target: 'https://localhost:7140/',
                 secure: false
             },
-            '^/accident': {
+            '^/accident/GenerateYears': {
                 target: 'https://localhost:7140/',
                 secure: false
             },
-            '^/accidentyears': {
+            '^/accident/GetAccidentData': {
                 target: 'https://localhost:7140/',
                 secure: false
             },

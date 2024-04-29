@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import HeaderSection from "@/components/layout/Header.jsx";
 import Sidebar from "@/components/layout/Sidebar.jsx";
 import MenuSection from "@/components/layout/Menu.jsx";
-import { saveUserData, fetchGetRoles, getRole} from "@/services/api.js";
+import { saveUserData, fetchGetRoles, getUser} from "@/services/api.js";
 import { UserOutlined, MailOutlined, PhoneOutlined, LockOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
@@ -32,12 +32,15 @@ const UserForm = () => {
 
     useEffect(() => {
         if (recordId) {
-            getRole(recordId)
-                .then(data => {
-                    // Обновляем значения полей формы
+            getUser(recordId)
+                .then(data => {                    
                     form.setFieldsValue({
-                        name: data.name,
-                        id: data.id
+                        username: data.username,
+                        id: data.id,
+                        email: data.email,
+                        phoneNumber: data.phoneNumber,
+                        isActive: data.isActive,
+                        role: data.role
                     });
                 })
                 .catch(error => {
@@ -79,7 +82,7 @@ const UserForm = () => {
                     }
                 />
             </Layout>
-            <Layout style={{ marginLeft: 300 }}>
+            <Layout className="layoutStyle">
                 <Content>
                     <div className="container-fluid">
                         <div className="row mt-3">
@@ -130,7 +133,20 @@ const UserForm = () => {
 
                                 <Form.Item
                                     name="password"
-                                    rules={[{ required: true, message: 'Введите пароль!' }]}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Введите пароль!'
+                                        },
+                                        {
+                                            min: 6,
+                                            message: 'Пароль должен содержать минимум 6 символов!'
+                                        },
+                                        {
+                                            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]+$/,
+                                            message: 'Пароль должен содержать хотя бы одну строчную и заглавную буквы, одну цифру и один специальный символ!'
+                                        }
+                                    ]}
                                 >
                                     <Input.Password prefix={<LockOutlined />} placeholder="Пароль" />
                                 </Form.Item>

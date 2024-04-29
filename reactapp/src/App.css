@@ -77,3 +77,14 @@
   background-color: white;
   padding-top: 20px;
 }
+
+.layoutStyle {
+  margin-left: 300px;
+  background: white;
+}
+
+.listContentStyle {
+  margin-left: 100px;
+  margin-right: 100px;
+  background-color: white;
+}

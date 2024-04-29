@@ -7,7 +7,7 @@ import TemperatureChart from "@/components/widgets/charts/TemperatureChart.jsx";
 import HumidityChart from "@/components/widgets/charts/HumidityChart.jsx";
 import WeatherIcon from "@/components/icon/WeatherIcon.jsx";
 import { Spin, Layout } from 'antd';
-import SearchSection from "@/components/SearchSection.jsx";
+import SearchSection from "@/components/layout/SearchSection.jsx";
 import {Link} from "react-router-dom";
 import FooterSection from "@/components/layout/Footer.jsx";
 import {fetchForecasts} from "@/services/api.js"

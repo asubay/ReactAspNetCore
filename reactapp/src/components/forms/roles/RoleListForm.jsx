@@ -100,10 +100,8 @@ const RoleListForm = () => {
                     }
                 />
             </Layout>
-            <Layout style={{
-                marginLeft: 300,
-            }}>
-                <Content>
+            <Layout className="layoutStyle">
+                <Content className="listContentStyle">
                     <div className="container-fluid">
                         <div className="row mt-3">
                             <div className="form-group">

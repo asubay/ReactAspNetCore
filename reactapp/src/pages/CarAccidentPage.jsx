@@ -64,7 +64,7 @@ const CarAccidentPage = () => {
     useEffect(() => {
         const fetchAccidentYears = async () => {            
             try {
-                const response = await fetch(`accidentyears`);
+                const response = await fetch(`/accident/GenerateYears`);
                 const data = await response.json();
                 setYears(data);
             } catch (error) {

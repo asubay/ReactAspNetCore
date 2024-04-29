@@ -60,9 +60,10 @@ public class UserController : ControllerBase
                 var currentRoles = await _userManager.GetRolesAsync(user);
                 await _userManager.RemoveFromRolesAsync(user, currentRoles);
                 var roles = new List<string>();
-                roles.Add(model.Role);
+                var role = _db.Roles.FirstOrDefault(f => f.Id == model.Role)?.NormalizedName;
+                roles.Add(role);
 
-                result = await _userManager.AddToRolesAsync(user, roles);
+                result = await _userManager.AddToRolesAsync(user, roles.ToArray());
                 if (result.Succeeded) {
                     if (isNewUser) {
                         result = await _userManager.AddPasswordAsync(user, model.Password);
@@ -76,24 +77,28 @@ public class UserController : ControllerBase
                 }
             }
         }
-        return BadRequest("Заполните все обязательные поля!");
+        return BadRequest("Error while saving data!");
     }
     
     [HttpGet("GetUser")]
-    public async Task<CreateUserViewModel> Get(string id) {
+    public async Task<CreateUserViewModel> Get(string id)
+    {
         var user = string.IsNullOrEmpty(id)
             ? new IdentityUser()
             : await _userManager.FindByIdAsync(id);
-        var userRoles = await _userManager.GetRolesAsync(user);
 
-        var model = new CreateUserViewModel {
+        var userRoles = _db.UserRoles.FirstOrDefault(f => f.UserId == id)?.RoleId;
+
+        var model = new CreateUserViewModel
+        {
             Id = user.Id,
             Email = user.Email,
             Username = user.UserName,
-            Role = userRoles[0],
+            Role = userRoles,
             IsActive = user.LockoutEnd == null,
             PhoneNumber = user.PhoneNumber,
         };
+
         return model;
     }
 }

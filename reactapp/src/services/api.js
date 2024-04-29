@@ -30,10 +30,11 @@ export const fetchAccident = async () => {
     }
 };
 
-export const fetchLogin = async (data) =>  {    
+export const fetchLogin = async (data) =>  {
+    console.log(data.username)
     try {
-        const response = await axios.post('/auth/login', {
-            username: data.username,
+        const response = await axios.post(`/auth/Login`, {
+            userName: data.username,
             password: data.password,
         });
         return response.data;
@@ -41,6 +42,15 @@ export const fetchLogin = async (data) =>  {
         console.error('fetch Login error:', error);
         throw new Error('Ошибка авторизации: неверные учетные данные');
     } 
+};
+
+export const getAuthenticationInfo = async () => {
+    try {
+        const response = await api.get(`/auth/GetCurrentUser`);        
+        return response;
+    } catch (error) {
+        console.error('Error checking authentication:', error);
+    }
 };
 
 export const fetchGetRoles = async () => {    
@@ -121,3 +131,4 @@ export const getUser = async (id) => {
         throw error;
     }
 };
+

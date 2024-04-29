@@ -44,7 +44,11 @@ export default defineConfig({
                 target: 'https://localhost:7140/',
                 secure: false
             },
-            '^/auth/login': {
+            '^/auth/Login': {
+                target: 'https://localhost:7140',
+                secure: false
+            },
+            '^/auth/GetCurrentUser': {
                 target: 'https://localhost:7140',
                 secure: false
             },
@@ -71,7 +75,7 @@ export default defineConfig({
             '^/user/GetUsersList': {
                 target: 'https://localhost:7140',
                 secure: false
-            }
+            }          
         },
         port: 5173,
         https: {

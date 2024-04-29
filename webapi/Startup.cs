@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using webapi.Service;
 using webapi.Service.Abstract;
 using Serilog;
 using webapi.Data;
+using webapi.Models;
 
 namespace webapi;
 
@@ -25,7 +27,19 @@ public class Startup
         services.AddDbContext<ApplicationDbContext>(options => options
                 .UseNpgsql(connString)
                 
-        );
+        ); 
+        
+       services.AddScoped<IAccountService, AccountService>();
+       services.AddDistributedMemoryCache(); // для синхронизации кэша между разными экземплярами приложения, запущенными на разных серверах или контейнерах
+       services.AddMemoryCache(); //добавляет простое хранилище кэша в памяти приложения
+        
+        services.AddSession(options =>
+        {
+            // Установка времени жизни сессии и других параметров
+            options.IdleTimeout = TimeSpan.FromMinutes(3600);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true; // Важно для GDPR и CCPA compliance
+        });
         
         services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -36,6 +50,7 @@ public class Startup
         services.AddSwaggerGen();
         services.AddScoped<IWeatherForecastService, WeatherForecastService>(); // Регистрация службы с жизненным циклом Scoped
         services.AddScoped<IAccidentService, AccidentService>();
+        services.AddSignalR(); //SignalR - это библиотека, которая обеспечивает возможность создания веб-приложений с реальным временем обмена сообщениями между сервером и клиентом
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -62,9 +77,11 @@ public class Startup
         app.UseAuthorization();
         app.UseRouting();
         app.UseSerilogRequestLogging(); 
+        app.UseSession();
 
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapHub<SessionHub>("/sessionHub");
             endpoints.MapControllers(); // Позволяет обслуживать API-маршруты
         });
     }

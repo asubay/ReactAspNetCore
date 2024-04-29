@@ -1,5 +1,6 @@
 import { Menu, Layout } from 'antd';
 import { TrademarkOutlined, UserOutlined, SettingOutlined, LinkOutlined } from '@ant-design/icons';
+import {Link} from "react-router-dom";
 
 const MenuSection = ({theme}) => {
     const { Sider } = Layout;
@@ -15,29 +16,29 @@ const MenuSection = ({theme}) => {
 
     const items = [        
         getItem(
-            <a href="/" target="_blank" rel="noopener noreferrer" className="link">
+            <Link to="/" className="link">
                 Главная
-            </a>,
+            </Link>,
             'home',
             <LinkOutlined className="icon"/>,
         ),
         getItem(
-            <a href="/" target="_blank" rel="noopener noreferrer" className="link">
+            <Link to="/" target="_blank"  className="link">
                 Администрирование
-            </a>,
+            </Link>,
             'administration',
             <SettingOutlined className="icon"/>,
             [
                 getItem(
-                <a href="/role" rel="noopener noreferrer" className="link">
-                    Роли
-                </a>, 
+                    <Link to="/role" className="link">
+                     Роли
+                    </Link>, 
                 'role',
                 <TrademarkOutlined className="icon"/>),
                 getItem(
-                    <a href="/user" rel="noopener noreferrer" className="link">
+                    <Link to="/user" className="link">
                         Пользователи
-                    </a>,
+                    </Link>,
                     'user',
                     <UserOutlined className="icon"/>)
             ]

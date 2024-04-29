@@ -31,6 +31,26 @@
 
   <ItemGroup>
     <None Remove="forecast_deploy.sh" />
+    <None Remove="publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+    <_ContentIncludedByDefault Remove="publish\webapi.deps.json" />
+    <_ContentIncludedByDefault Remove="publish\webapi.runtimeconfig.json" />
   </ItemGroup>
 
 </Project>

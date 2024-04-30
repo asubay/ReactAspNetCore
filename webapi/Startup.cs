@@ -74,9 +74,12 @@ public class Startup
         });
 
         app.UseHttpsRedirection();
-        app.UseAuthorization();
         app.UseRouting();
+        app.UseAuthentication();  
+        app.UseAuthorization();
+        
         app.UseSerilogRequestLogging(); 
+        
         app.UseSession();
 
         app.UseEndpoints(endpoints =>

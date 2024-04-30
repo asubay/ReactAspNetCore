@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://';
+const API_BASE_URL = '/api/';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -9,6 +9,7 @@ const api = axios.create({
     },
 });
 
+console.log(api.defaults);
 
 export const fetchForecasts = async (cityId) => {
     try {
@@ -33,7 +34,7 @@ export const fetchAccident = async () => {
 export const fetchLogin = async (data) =>  {
     console.log(data.username)
     try {
-        const response = await axios.post(`/auth/Login`, {
+        const response = await api.post(`/auth/Login`, {
             userName: data.username,
             password: data.password,
         });
@@ -46,12 +47,8 @@ export const fetchLogin = async (data) =>  {
 
 export const getAuthenticationInfo = async () => {
     try {
-        const response = await api.get(`/auth/GetCurrentUser`);  
-        if (response.status === 200) {
-            return response.data;
-        } else {           
-            return null;
-        }        
+        const response = await api.get(`/auth/GetCurrentUser`);
+        return response.data;     
     } catch (error) {
         console.error('Error checking authentication:', error);
     }
@@ -69,7 +66,7 @@ export const fetchGetRoles = async () => {
 
 export const editRole = async (data) =>  {
     try {        
-        const response = await axios.post('/role/EditRole', {
+        const response = await api.post('/role/EditRole', {
             id: data.id,
             name: data.name,
         });
@@ -106,7 +103,7 @@ export const fetchGetUsers= async () => {
 export const saveUserData = async (userData) => {
     
     try {
-        const response = await axios.post('/user/EditUser', {
+        const response = await api.post('/user/EditUser', {
             id: userData.id,
             username: userData.username,           
             email: userData.email,
@@ -124,7 +121,7 @@ export const saveUserData = async (userData) => {
 
 export const getUser = async (id) => {
     try {
-        const response = await api.get(`/user/GetUser`, {
+        const response = await api.get(`user/GetUser`, {
             params: {
                 id: id
             }
@@ -133,6 +130,14 @@ export const getUser = async (id) => {
     } catch (error) {
         console.error('Error while getting user:', error);
         throw error;
+    }
+};
+
+export const fetchLogout = async () =>  {
+    try {
+        await api.post('auth/Logout');        
+    } catch (error) {
+        throw new Error('Ошибка при изменений данных');
     }
 };
 

@@ -66,13 +66,20 @@ public class AccountService : IAccountService
         };
     }
     
-    public async Task<UserInformation> GetCurrentUserAsync(string? user)
+    public async Task<UserInformation> GetCurrentUserAsync()
     {
-        if (!string.IsNullOrEmpty(user))
+        if (_user != null && _user.Identity != null && _user.Identity.IsAuthenticated)
         {
-            var res = (UserInformation)_memoryCache.Get(user);
-            return res;
+            var userName = _user.Identity.Name;
+            if (!string.IsNullOrEmpty(userName))
+            {
+                if (_memoryCache.TryGetValue(userName, out UserInformation cachedUserInfo))
+                {
+                    return cachedUserInfo;
+                }
+            }
         }
         return null;
     }
+
 }

@@ -88,39 +88,25 @@ const RoleListForm = () => {
             </Spin>
         );
     }
-    return (
-        <>
-            <Layout hasSider>
-                <HeaderSection/>
-                <Sidebar
-                    content={
-                        <div>
-                            <MenuSection theme={"dark"}/>                            
-                        </div>
-                    }
-                />
-            </Layout>
-            <Layout className="layoutStyle">
-                <Content className="listContentStyle">
-                    <div className="container-fluid">
-                        <div className="row mt-3">
-                            <div className="form-group">
-                                <h3 style={{textAlign: "left"}}>Роли</h3>
-                                <hr/>
-                            </div>
-
-                            <div className="col-11 text-right mb-3">
-                                <Button type="primary" icon={<PlusOutlined/>} onClick={handleAdd}>
-                                    Сохранить
-                                </Button>
-                            </div>
-
-                            <CustomTable columns={columns} dataSource={roles}/>
-                        </div>
+    return (   
+        <Content className="listContentStyle">
+            <div className="container-fluid">
+                <div className="row mt-3">
+                    <div className="form-group">
+                        <h3 style={{textAlign: "left"}}>Роли</h3>
+                        <hr/>
                     </div>
-                </Content>                
-            </Layout>            
-        </>
+
+                    <div className="col-11 text-right mb-3">
+                        <Button type="primary" icon={<PlusOutlined/>} onClick={handleAdd}>
+                            Сохранить
+                        </Button>
+                    </div>
+
+                    <CustomTable columns={columns} dataSource={roles}/>
+                </div>
+            </div>
+        </Content>  
     );
 };
 

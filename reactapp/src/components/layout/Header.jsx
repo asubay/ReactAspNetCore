@@ -17,9 +17,7 @@ const HeaderSection = () => {
         if (!isAuthenticated) {
             navigate("/login");
         }
-    };
-
-    console.log("thist is ", isAdmin)
+    };    
         
     return (
         <Header

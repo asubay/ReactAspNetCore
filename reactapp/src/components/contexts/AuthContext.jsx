@@ -1,5 +1,5 @@
 import React, {createContext, useState, useContext, useEffect, useRef, useCallback} from 'react';
-import {fetchLogin, getAuthenticationInfo} from "@/services/api.js";
+import {fetchLogin, fetchLogout, getAuthenticationInfo} from "@/services/api.js";
 import { useNavigate } from "react-router-dom";
 
 // Создание контекста аутентификации
@@ -43,8 +43,7 @@ export const AuthProvider = ({ children }) => {
                 setIsAdmin(false);
                 console.error('Error checking authentication:', error);
             }
-        };
-        console.log('AuthProvider useEffect');
+        };        
 
         checkAuthentication();
     }, []);
@@ -70,6 +69,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         setUser(null);
         setIsAdmin(false);
+        fetchLogout();
     };
 
     const contextValue = {

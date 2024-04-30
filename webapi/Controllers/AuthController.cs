@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Models;
@@ -7,7 +8,7 @@ using webapi.Utils;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("auth")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
@@ -46,6 +47,7 @@ public class AuthController : ControllerBase
             
             HttpContext.Session.Clear();
             HttpContext.Session.SetString(Constants.SessionUserKey, request.Username);
+            
             var userInfo = await _accountService.UpdateCurrentUserInfo(request.Username);
             return Ok(userInfo);
         }
@@ -54,17 +56,17 @@ public class AuthController : ControllerBase
     }
     
     [HttpGet("GetCurrentUser")]
-    public async Task<IActionResult> GetCurrentUser()
+    public async Task<ActionResult<UserInformation>> GetCurrentUser()
     {
-        var result = await _accountService.GetCurrentUserAsync("admin");
-        if (result!=null)
+        var result = await _accountService.GetCurrentUserAsync();
+        if (result != null)
         {
             return Ok(result);
         }
         return BadRequest("Authentication error: invalid credentials");
     }
     
-    [HttpGet("Logout")]
+    [HttpPost("Logout")]
     public async Task<IActionResult> Logout() {
         await _signInManager.SignOutAsync();
         return Ok();

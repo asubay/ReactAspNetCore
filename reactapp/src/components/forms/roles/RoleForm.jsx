@@ -44,78 +44,63 @@ const RoleForm = () => {
         } catch (error) {
             setErrorMessage(error.message);
         }
-    };
-    
-    return (
-        <>
-            <Layout hasSider>
-                <HeaderSection/>
-                <Sidebar
-                    content={
-                        <div>
-                            <MenuSection theme={"dark"}/>
-                        </div>
-                    }
-                />
-            </Layout>
-            <Layout style={{ marginLeft: 300 }}>
-                <Content>
-                    <div className="container-fluid">
-                        <div className="row mt-3">
-                            <div className="form-group">
-                                {
-                                    <h3 style={{textAlign: "left"}}>
-                                        {recordId ? ("Редактирование"): ("Добавление новой роли")}
-                                    </h3>                                    
-                                }
-                                <hr/>
-                            </div>
-                            <Row justify="center" align="middle">
-                                <div className="col-6 mt-4">
-                                    <Form
-                                        form={form}
-                                        name="edit_role"
-                                        onFinish={handleFormSubmit}
-                                        onFinishFailed={onFinishFailed}
-                                    >
-                                        {errorMessage && (
-                                            <Alert message={errorMessage} type="error" showIcon
-                                                   style={{marginBottom: '16px'}}/>
-                                        )}
-                                        <Row gutter={[16, 16]}>
-                                            <Col span={24}>
-                                                <Form.Item name="id" hidden>
-                                                    <Input/>
-                                                </Form.Item>
-                                                <Form.Item
-                                                    label="Наименование"
-                                                    name="name"
-                                                    style={{marginBottom: 0}}
-                                                    rules={[{required: true, message: 'Введите наименование роли'}]}
-                                                >
-                                                    <Input.TextArea style={{width: '100%'}}/>
-                                                </Form.Item>
-                                            </Col>
-                                            <Col span={24}>
-                                                <Form.Item style={{marginBottom: 0}}>
-                                                    <Row justify="end">
-                                                        <Col>
-                                                            <Button type="primary" htmlType="submit">
-                                                                Сохранить
-                                                            </Button>
-                                                        </Col>                                                        
-                                                    </Row>
-                                                </Form.Item>
-                                            </Col>
-                                        </Row>
-                                    </Form>
-                                </div>
-                            </Row>
-                        </div>
+    };    
+    return (        
+        <Content>
+            <div className="container-fluid">
+                <div className="row mt-3">
+                    <div className="form-group">
+                        {
+                            <h3 style={{textAlign: "left"}}>
+                                {recordId ? ("Редактирование"): ("Добавление новой роли")}
+                            </h3>                                    
+                        }
+                        <hr/>
                     </div>
-                </Content>
-            </Layout>
-        </>
+                    <Row justify="center" align="middle">
+                        <div className="col-6 mt-4">
+                            <Form
+                                form={form}
+                                name="edit_role"
+                                onFinish={handleFormSubmit}
+                                onFinishFailed={onFinishFailed}
+                            >
+                                {errorMessage && (
+                                    <Alert message={errorMessage} type="error" showIcon
+                                           style={{marginBottom: '16px'}}/>
+                                )}
+                                <Row gutter={[16, 16]}>
+                                    <Col span={24}>
+                                        <Form.Item name="id" hidden>
+                                            <Input/>
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Наименование"
+                                            name="name"
+                                            style={{marginBottom: 0}}
+                                            rules={[{required: true, message: 'Введите наименование роли'}]}
+                                        >
+                                            <Input.TextArea style={{width: '100%'}}/>
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={24}>
+                                        <Form.Item style={{marginBottom: 0}}>
+                                            <Row justify="end">
+                                                <Col>
+                                                    <Button type="primary" htmlType="submit">
+                                                        Сохранить
+                                                    </Button>
+                                                </Col>                                                        
+                                            </Row>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </div>
+                    </Row>
+                </div>
+            </div>
+        </Content>           
     );
 };
 

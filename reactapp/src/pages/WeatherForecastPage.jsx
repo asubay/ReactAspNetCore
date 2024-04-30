@@ -65,63 +65,50 @@ const  WeatherForecastPage = () => {
     const selectedHumidityData = forecasts.params.slice(0, 6).map(item => ({
         time: item.time,
         temperature: item.humidity
-    }));    
-   
+    })); 
 
     return (
         <Spin spinning={loading}>      
-            <Layout>
-                <HeaderSection/>    
-                <Layout>
-                    <Sidebar
-                        content={ <MenuSection theme={"dark"}/> }
-                    /> 
-                    <Layout style={{
-                        marginLeft: 300                        
-                    }}>
-                        <Content>
-                            <TopCarousel />
-                            <SearchSection
-                                handleCityChange={handleCityChange}
-                                selectedCityName={weatherData.selectedCityName}
-                                selectedCity={ weatherData.selectedCity }
-                            />
-                            <div className="container-fluid">
-                                <div className="row mt-3">
-                                    <div className="col-sm-6">
-                                        <h3>Прогноз погоды на ближайшие 5 дней</h3>
-                                        <ForecastTable forecasts={forecasts.params}></ForecastTable>
-                                    </div>
-                                    <div className="col-sm-6">
-                                        <div>
-                                            <h3>{forecasts.name}, {forecasts.country}</h3><br/>
-                                            <WeatherIcon temperature={forecasts.params[0].temperature} />
-                                            <p><strong>Восход солнца:</strong> {forecasts.sunrise}</p>
-                                            <p><strong>Закат солнца:</strong> {forecasts.sunset}</p>
-                                            <Link to={`/yka-car-accident/${forecasts.id}`}>
-                                                Перейти к статистике ДТП
-                                            </Link>
-                                        </div>
-                                        <div className="leaflet-container">
-                                            <LeafletMap center={[forecasts.lat, forecasts.lon]} zoom={13} />
-                                        </div>
-                                        <div className="row mt-3">
-                                            <strong><h3>Почасовой прогноз</h3></strong>
-                                            <div className="col-sm-6">
-                                                <TemperatureChart data={ selectedTemperatureData }/>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <HumidityChart data={ selectedHumidityData }/>
-                                            </div>
-                                        </div>
-                                    </div>
+            <Content>
+                <TopCarousel />
+                <SearchSection
+                    handleCityChange={handleCityChange}
+                    selectedCityName={weatherData.selectedCityName}
+                    selectedCity={ weatherData.selectedCity }
+                />
+                <div className="container-fluid">
+                    <div className="row mt-3">
+                        <div className="col-sm-6">
+                            <h3>Прогноз погоды на ближайшие 5 дней</h3>
+                            <ForecastTable forecasts={forecasts.params}></ForecastTable>
+                        </div>
+                        <div className="col-sm-6">
+                            <div>
+                                <h3>{forecasts.name}, {forecasts.country}</h3><br/>
+                                <WeatherIcon temperature={forecasts.params[0].temperature} />
+                                <p><strong>Восход солнца:</strong> {forecasts.sunrise}</p>
+                                <p><strong>Закат солнца:</strong> {forecasts.sunset}</p>
+                                <Link to={`/yka-car-accident`}>
+                                    Перейти к статистике ДТП
+                                </Link>
+                            </div>
+                            <div className="leaflet-container">
+                                <LeafletMap center={[forecasts.lat, forecasts.lon]} zoom={13} />
+                            </div>
+                            <div className="row mt-3">
+                                <strong><h3>Почасовой прогноз</h3></strong>
+                                <div className="col-sm-6">
+                                    <TemperatureChart data={ selectedTemperatureData }/>
                                 </div>
-                            </div>                            
-                        </Content>
-                        <FooterSection/>                        
-                    </Layout>                    
-                </Layout>                
-            </Layout> 
+                                <div className="col-sm-6">
+                                    <HumidityChart data={ selectedHumidityData }/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                            
+            </Content>
+            <FooterSection/>    
         </Spin>  
     );
 }

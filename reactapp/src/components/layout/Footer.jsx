@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout } from 'antd';
+import {Link} from "react-router-dom";
 const { Footer } = Layout;
 
 const FooterSection = () => {
@@ -9,7 +10,7 @@ const FooterSection = () => {
                 textAlign: 'center',
             }}
         >
-            Created by <a href="https://www.linkedin.com/in/yerkezhan-assubayeva-6a02641aa/">asubay</a> ©{new Date().getFullYear()}
+            Created by <Link to="https://www.linkedin.com/in/yerkezhan-assubayeva-6a02641aa/">asubay</Link> ©{new Date().getFullYear()}
         </Footer>
     );
 };

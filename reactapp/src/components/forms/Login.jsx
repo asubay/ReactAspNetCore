@@ -19,7 +19,7 @@ const Login = () => {
     
     return (
         <div className="container">
-            <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+            <Row justify="center" align="middle" style={{ minHeight: '50vh' }}>
                 <Col span={24} style={{ maxWidth: 600 }}>
                     <Form
                         name="basic"
@@ -59,8 +59,7 @@ const Login = () => {
                             ]}
                         >
                             <Input.Password />
-                        </Form.Item> 
-                        
+                        </Form.Item>                         
                         <Form.Item
                             wrapperCol={{ offset: 8, span: 16 }} >
                             <Button type="primary" htmlType="submit">

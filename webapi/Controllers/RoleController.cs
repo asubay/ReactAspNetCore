@@ -6,7 +6,7 @@ using webapi.Models;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("role")]
+[Route("api/role")]
 public class RoleController : ControllerBase
 {
     private readonly ApplicationDbContext _db;

@@ -5,7 +5,7 @@ using webapi.Service.Abstract;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("accident")]
+[Route("api/accident")]
 public class AccidentController : ControllerBase
 {
     private readonly IAccidentService _service;

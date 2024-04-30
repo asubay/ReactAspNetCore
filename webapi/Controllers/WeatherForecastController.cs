@@ -5,7 +5,7 @@ using webapi.Service.Abstract;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/weatherforecast")]
 public class WeatherForecastController : ControllerBase
 {
     private readonly ILogger<WeatherForecastController> _logger;

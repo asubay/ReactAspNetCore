@@ -6,7 +6,7 @@ using webapi.Models;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("user")]
+[Route("api/user")]
 public class UserController : ControllerBase
 {
     private readonly ApplicationDbContext _db;

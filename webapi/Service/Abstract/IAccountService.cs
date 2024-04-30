@@ -6,5 +6,5 @@ public interface IAccountService
 {
     Task KeepSessionAlive(string user);
     Task<UserInformation> UpdateCurrentUserInfo(string username);
-    Task<UserInformation> GetCurrentUserAsync(string? user);
+    Task<UserInformation> GetCurrentUserAsync();
 }

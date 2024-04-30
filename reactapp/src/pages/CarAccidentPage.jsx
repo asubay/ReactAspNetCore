@@ -12,6 +12,7 @@ import KindPieChart from "@/components/widgets/charts/KindPieChart.jsx";
 import HeatingMap from "@/components/widgets/maps/HeatingMap.jsx";
 import LineChart from "@/components/widgets/charts/LineChart.jsx";
 import { fetchAccident } from "@/services/api.js"
+import HeaderSection from "@/components/layout/Header.jsx";
 
 const { Content } = Layout;
 
@@ -107,90 +108,81 @@ const CarAccidentPage = () => {
         .sort((a, b) => b[1].length - a[1].length)
 
     return (
-        <>
-            <Layout hasSider>             
-               <Sidebar 
-                   content={                   
-                   <div>
-                      <MenuSection theme={"dark"}/>
-                       <hr style={{color:"white"}}/>
-                       <div className="sidebarContent">
-                           <div className="form-group">
-                               <h5 style={{color:"white"}}>Выберите года:</h5>
-                               <CustomMultiSelect
-                                   options={years}
-                                   placeholder="Выберите"
-                                   handleChange={handleChange}
-                               />
-                           </div>
-                       </div>                        
-                   </div>
-               }
-               />                
-                <Layout
-                    style={{
-                        marginLeft: 300,                        
-                    }}
-                > 
-                    <Content className="accident">
-                    <h1>Анализ ДТП по городу Усть-Каменогорск</h1>
-                    <div className="mt-3">
-                        <AccidentTable accidents={accident}></AccidentTable>
-                    </div>                    
-                    <div className="row">
-                        <hr/>
-                        <h3>Количество ДТП по категориям</h3>
-                        <div className='col-sm-11'>
-                            <OffenceBar
-                                data={sortedCategories}
-                                label={'Количество ДТП по проишествиям'}
-                            />
-                        </div>                        
-                        <hr/>
-                        <div className="col-sm-6 mt-5">
-                            <h3>Количество ДТП по состоянию водителей</h3>
-                            <div className="container d-flex justify-content-center align-items-center">                                
-                                <KindPieChart
-                                    data={sortedImpairments}
-                                    label={"Количество ДТП"}/>
-                            </div>
-                        </div>
-                        <div className="col-sm-6 mt-5">
-                            <h3>Количество ДТП по времени суток</h3>
-                            <div className="container d-flex justify-content-center align-items-center">                               
-                                <KindPieChart
-                                    data={sortedLights}
-                                    label={"Количество ДТП: "}/>
-                            </div>                            
-                        </div>
-                        <hr/>
-                        <div className='col-sm-6 mt-5'>
-                            <h3>Кол-во ДТП по виду транспорта</h3>
-                            <OffenceBar
-                                data={sortedVehicles}
-                                label={"Количество ДТП"}
-                            />
-                        </div>
-                        <div className='col-sm-6 mt-5'>
-                            <h3>Кол-во ДТП ежегодно (2015-2024)</h3>
-                            <LineChart
-                                data={sortedYears}
-                                label={"Количество ДТП"}
-                            />
-                        </div>
-                    </div> 
+        <>   
+           <Sidebar 
+               content={                   
+               <div>
+                  <MenuSection theme={"dark"}/>
+                   <hr style={{color:"white"}}/>
+                   <div className="sidebarContent">
+                       <div className="form-group">
+                           <h5 style={{color:"white"}}>Выберите года:</h5>
+                           <CustomMultiSelect
+                               options={years}
+                               placeholder="Выберите"
+                               handleChange={handleChange}
+                           />
+                       </div>
+                   </div>                        
+               </div>
+           }
+           />                
+            <Layout> 
+                <Content className="accident">
+                <h1>Анализ ДТП по городу Усть-Каменогорск</h1>
+                <div className="mt-3">
+                    <AccidentTable accidents={accident}></AccidentTable>
+                </div>                    
+                <div className="row">
                     <hr/>
-                    <h3>Расположение случаев ДТП на карте</h3>
-                    <HeatingMap
-                        center={[49.954527,82.518867]}
-                        zoom={11}
-                        coordinates={mapData}
-                    />
-                </Content>       
-                </Layout>    
-            </Layout>
-            <Layout>
-                <FooterSection/>
+                    <h3>Количество ДТП по категориям</h3>
+                    <div className='col-sm-11'>
+                        <OffenceBar
+                            data={sortedCategories}
+                            label={'Количество ДТП по проишествиям'}
+                        />
+                    </div>                        
+                    <hr/>
+                    <div className="col-sm-6 mt-5">
+                        <h3>Количество ДТП по состоянию водителей</h3>
+                        <div className="container d-flex justify-content-center align-items-center">                                
+                            <KindPieChart
+                                data={sortedImpairments}
+                                label={"Количество ДТП"}/>
+                        </div>
+                    </div>
+                    <div className="col-sm-6 mt-5">
+                        <h3>Количество ДТП по времени суток</h3>
+                        <div className="container d-flex justify-content-center align-items-center">                               
+                            <KindPieChart
+                                data={sortedLights}
+                                label={"Количество ДТП: "}/>
+                        </div>                            
+                    </div>
+                    <hr/>
+                    <div className='col-sm-6 mt-5'>
+                        <h3>Кол-во ДТП по виду транспорта</h3>
+                        <OffenceBar
+                            data={sortedVehicles}
+                            label={"Количество ДТП"}
+                        />
+                    </div>
+                    <div className='col-sm-6 mt-5'>
+                        <h3>Кол-во ДТП ежегодно (2015-2024)</h3>
+                        <LineChart
+                            data={sortedYears}
+                            label={"Количество ДТП"}
+                        />
+                    </div>
+                </div> 
+                <hr/>
+                <h3>Расположение случаев ДТП на карте</h3>
+                <HeatingMap
+                    center={[49.954527,82.518867]}
+                    zoom={11}
+                    coordinates={mapData}
+                />
+            </Content>       
             </Layout>
         </>        
     );

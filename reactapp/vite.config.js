@@ -32,50 +32,10 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
+            '^/api/': {
                 target: 'https://localhost:7140/',
                 secure: false
-            },
-            '^/accident/GenerateYears': {
-                target: 'https://localhost:7140/',
-                secure: false
-            },
-            '^/accident/GetAccidentData': {
-                target: 'https://localhost:7140/',
-                secure: false
-            },
-            '^/auth/Login': {
-                target: 'https://localhost:7140',
-                secure: false
-            },
-            '^/auth/GetCurrentUser': {
-                target: 'https://localhost:7140',
-                secure: false
-            },
-            '^/role/GetRoleList': {
-                target: 'https://localhost:7140',
-                secure: false
-            },
-            '^/role/EditRole': {
-                target: 'https://localhost:7140',
-                secure: false
-            },
-            '^/role/GetRole': {
-                target: 'https://localhost:7140',
-                secure: false
-            },
-            '^/user/GetUser': {
-                target: 'https://localhost:7140',
-                secure: false
-            },
-            '^/user/EditUser': {
-                target: 'https://localhost:7140',
-                secure: false
-            },
-            '^/user/GetUsersList': {
-                target: 'https://localhost:7140',
-                secure: false
-            }          
+            }
         },
         port: 5173,
         https: {

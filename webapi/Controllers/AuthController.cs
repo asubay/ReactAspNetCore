@@ -46,18 +46,22 @@ public class AuthController : ControllerBase
             
             HttpContext.Session.Clear();
             HttpContext.Session.SetString(Constants.SessionUserKey, request.Username);
-            await _accountService.UpdateCurrentUserInfo(request.Username);
-            var responseData = new LoginResponse { UserName = user.UserName };
-            return Ok(responseData);
+            var userInfo = await _accountService.UpdateCurrentUserInfo(request.Username);
+            return Ok(userInfo);
         }
         
         return BadRequest("Authentication error: invalid credentials");
     }
     
     [HttpGet("GetCurrentUser")]
-    public async Task<UserInformation> GetCurrentUser()
+    public async Task<IActionResult> GetCurrentUser()
     {
-        return await _accountService.GetCurrentUserAsync();
+        var result = await _accountService.GetCurrentUserAsync("admin");
+        if (result!=null)
+        {
+            return Ok(result);
+        }
+        return BadRequest("Authentication error: invalid credentials");
     }
     
     [HttpGet("Logout")]

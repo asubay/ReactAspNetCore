@@ -16,33 +16,31 @@ function useNavigateRef() {
     return navRef;
 }
 
-
 // Создание провайдера аутентификации
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [user, setUser] = useState(null);    
-    const navigateRef = useNavigateRef();
-
-    useEffect(() => {
-        console.log('mount');
-        return () => {
-            console.log('unmount');
-        }
-    }, []);
+    const navigateRef = useNavigateRef();    
     
     //проверка актуальности сессии, в случая успеха возвращает инфо о пользователе
     useEffect(() => {
-        const checkAuthentication = async () => {
+        const checkAuthentication = async () => {           
             try {
-                const response = await getAuthenticationInfo();                
-                if (response.ok) {
+                const response = await getAuthenticationInfo();  
+                if (response) {
                     setIsAuthenticated(true);
-                    setUser(response.data); // сервер возвращает информацию о пользователе
-                } else {
-                    setIsAuthenticated(false);
-                    setUser(null);
+                    if (response.isAdmin)
+                    {                        
+                        setIsAdmin(true);
+                    }                    
+                    setUser(response);
                 }
+                
             } catch (error) {
+                setIsAuthenticated(false);
+                setUser(null);
+                setIsAdmin(false);
                 console.error('Error checking authentication:', error);
             }
         };
@@ -57,6 +55,10 @@ export const AuthProvider = ({ children }) => {
             const response = await fetchLogin(data);
             setIsAuthenticated(true);
             setUser(response);
+            if (response.isAdmin)
+            {
+                setIsAdmin(true);
+            }
             navigateRef.current("/");
         } catch (error) {            
             throw error;
@@ -66,11 +68,13 @@ export const AuthProvider = ({ children }) => {
     // Функция для выхода
     const logout = () => {
         setIsAuthenticated(false);
-        setUser(null); 
+        setUser(null);
+        setIsAdmin(false);
     };
 
     const contextValue = {
         isAuthenticated,
+        isAdmin,
         user,
         login,
         logout

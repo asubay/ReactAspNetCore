@@ -5,6 +5,6 @@ namespace webapi.Service.Abstract;
 public interface IAccountService
 {
     Task KeepSessionAlive(string user);
-    Task UpdateCurrentUserInfo(string username);
-    Task<UserInformation> GetCurrentUserAsync();
+    Task<UserInformation> UpdateCurrentUserInfo(string username);
+    Task<UserInformation> GetCurrentUserAsync(string? user);
 }

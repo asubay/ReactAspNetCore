@@ -34,11 +34,12 @@ public class AccountService : IAccountService
         await UpdateCurrentUserInfo(user);
     }
     
-    public async Task UpdateCurrentUserInfo(string username) {
+    public async Task<UserInformation> UpdateCurrentUserInfo(string username) {
         var userInfo = await GetCurrentUserFromDbAsync(username);
         _memoryCache.Set(username, userInfo, new MemoryCacheEntryOptions {
             SlidingExpiration = TimeSpan.FromSeconds(3600),
         });
+        return userInfo;
     }
     
     private async Task<UserInformation> GetCurrentUserFromDbAsync(string username)
@@ -56,7 +57,7 @@ public class AccountService : IAccountService
         return new UserInformation
         {
             Id = currentUser.Id,
-            Username = currentUser.UserName,
+            UserName = currentUser.UserName,
             Role = role?.Id,
             IsAdmin = role?.Name == "admin",
             Email = currentUser.Email,
@@ -65,11 +66,12 @@ public class AccountService : IAccountService
         };
     }
     
-    public async Task<UserInformation> GetCurrentUserAsync()
+    public async Task<UserInformation> GetCurrentUserAsync(string? user)
     {
-        if (_user?.Identity?.Name != null)
+        if (!string.IsNullOrEmpty(user))
         {
-            return (UserInformation)_memoryCache.Get(_user.Identity.Name);
+            var res = (UserInformation)_memoryCache.Get(user);
+            return res;
         }
         return null;
     }

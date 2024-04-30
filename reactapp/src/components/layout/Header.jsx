@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const HeaderSection = () => {
-    const { isAuthenticated, user, logout } = useAuth();
+    const { isAuthenticated, user, logout, isAdmin } = useAuth();
     const navigate = useNavigate();    
     
     const handleLogout = () => {        
@@ -17,7 +17,9 @@ const HeaderSection = () => {
         if (!isAuthenticated) {
             navigate("/login");
         }
-    };   
+    };
+
+    console.log("thist is ", isAdmin)
         
     return (
         <Header

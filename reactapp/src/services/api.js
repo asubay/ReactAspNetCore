@@ -46,8 +46,12 @@ export const fetchLogin = async (data) =>  {
 
 export const getAuthenticationInfo = async () => {
     try {
-        const response = await api.get(`/auth/GetCurrentUser`);        
-        return response;
+        const response = await api.get(`/auth/GetCurrentUser`);  
+        if (response.status === 200) {
+            return response.data;
+        } else {           
+            return null;
+        }        
     } catch (error) {
         console.error('Error checking authentication:', error);
     }

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const HeaderSection = () => {
-    const { isAuthenticated, user, logout, isAdmin } = useAuth();
+    const { isAuthenticated, user, logout } = useAuth();
     const navigate = useNavigate();    
     
     const handleLogout = () => {        

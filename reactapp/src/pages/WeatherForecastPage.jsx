@@ -11,9 +11,6 @@ import SearchSection from "@/components/layout/SearchSection.jsx";
 import {Link} from "react-router-dom";
 import FooterSection from "@/components/layout/Footer.jsx";
 import {fetchForecasts} from "@/services/api.js"
-import MenuSection from "@/components/layout/Menu.jsx";
-import Sidebar from "@/components/layout/Sidebar.jsx";
-import HeaderSection from "@/components/layout/Header.jsx";
 
 const { Content } = Layout;
 

@@ -25,7 +25,8 @@ export const AuthProvider = ({ children }) => {
     
     //проверка актуальности сессии, в случая успеха возвращает инфо о пользователе
     useEffect(() => {
-        const checkAuthentication = async () => {           
+        const checkAuthentication = async () => {
+            
             try {
                 const response = await getAuthenticationInfo();  
                 if (response) {
@@ -78,7 +79,7 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         logout
-    };
+    };   
 
     return (
         <AuthContext.Provider value={ contextValue }>
@@ -86,5 +87,5 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
+export default AuthProvider;
 export const useAuth = () => useContext(AuthContext);

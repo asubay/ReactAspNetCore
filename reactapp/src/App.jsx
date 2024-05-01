@@ -10,7 +10,7 @@ import UserListForm from "@/components/forms/users/UserListForm.jsx";
 import UserForm from "@/components/forms/users/UserForm.jsx";
 import MainLayout from "@/components/layout/MainLayout.jsx";
 
-function App() {
+function App() {    
     return (
         <div className="App">
             <Routes>

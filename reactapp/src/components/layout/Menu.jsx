@@ -46,7 +46,7 @@ const MenuSection = ({theme}) => {
     }
 
     return (
-        <div>
+        <>
             <Sider width={300} style={{               
                 marginTop: 65                
             }}>
@@ -58,7 +58,7 @@ const MenuSection = ({theme}) => {
                     selectedKeys={[]}
                 />
             </Sider>
-        </div>
+        </>
     );
 };
 

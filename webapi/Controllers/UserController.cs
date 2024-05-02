@@ -101,4 +101,15 @@ public class UserController : ControllerBase
 
         return model;
     }
+    
+    [HttpPost("DeleteUser")]
+    public async Task<IActionResult> Delete([FromBody] string id) {
+        var row = await _db.Users.FindAsync(id);
+        if (row == null) {
+            return BadRequest("User not found!");;
+        }
+        _db.Users.Remove(row);
+        await _db.SaveChangesAsync();
+        return Content("Succeeded");
+    }
 }

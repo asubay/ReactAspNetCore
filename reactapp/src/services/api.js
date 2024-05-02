@@ -90,6 +90,16 @@ export const getRole = async (id) => {
     }
 };
 
+export const deleteRole = async (id) => {
+    try {
+        const response = await api.post('/role/DeleteRole', id.toString());
+        return response.data;
+    } catch (error) {
+        console.error('Error while deleting role:', error);
+        throw error;
+    }
+};
+
 export const fetchGetUsers= async () => {
     try {
         const response = await api.get(`/user/GetUsersList`);
@@ -129,6 +139,16 @@ export const getUser = async (id) => {
         return response.data;
     } catch (error) {
         console.error('Error while getting user:', error);
+        throw error;
+    }
+};
+
+export const deleteUser = async (id) => {
+    try {        
+        const response = await api.post('/user/DeleteUser', id.toString());
+        return response.data;
+    } catch (error) {
+        console.error('Error while deleting user:', error);
         throw error;
     }
 };

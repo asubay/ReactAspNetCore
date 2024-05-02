@@ -66,4 +66,16 @@ public class RoleController : ControllerBase
         };
         return model;
     }
+    
+    [HttpPost("DeleteRole")]
+    public async Task<IActionResult> Delete([FromBody] string id) {
+        var row = await _db.Roles.FindAsync(id);
+        if (row == null) {
+            return BadRequest("Role not found!");;
+        }
+        _db.Roles.Remove(row);
+        await _db.SaveChangesAsync();
+        return Content("Succeeded");
+    }
+    
 }

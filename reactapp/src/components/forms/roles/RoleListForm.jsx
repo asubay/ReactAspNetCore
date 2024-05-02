@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { fetchGetRoles } from "@/services/api.js";
-import { Layout, Spin, Space, Button, Tooltip } from 'antd';
+import {deleteRole, fetchGetRoles} from "@/services/api.js";
+import { Layout, Spin, Space, Button, Tooltip, message } from 'antd';
 import CustomTable from "@/components/widgets/tables/CustomTable.jsx";
-import Sidebar from "@/components/layout/Sidebar.jsx";
-import MenuSection from "@/components/layout/Menu.jsx";
-import HeaderSection from "@/components/layout/Header.jsx";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +11,7 @@ const RoleListForm = () => {
     const navigate = useNavigate();
     const [roles, setRoles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
         
     const handleEdit = async (record) => {
         try {          
@@ -23,8 +21,13 @@ const RoleListForm = () => {
         }        
     };
 
-    const handleDelete = (key) => {
-        console.log('Delete record with key:', key);
+    const handleDelete = async (key) => {
+        const result = await deleteRole(key);
+        if (result === "Succeeded")
+        {
+            message.success('Роль успешно удалена');
+            setDeleteSuccess(!deleteSuccess);
+        }
     };
 
     const handleAdd = () => {
@@ -48,7 +51,7 @@ const RoleListForm = () => {
         };
         fetchRolesList();
 
-    }, [])
+    }, [deleteSuccess])
 
     const columns = [
         {
@@ -74,7 +77,7 @@ const RoleListForm = () => {
                         <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
                     </Tooltip>
                     <Tooltip title="Удалить">
-                        <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.key)} />
+                        <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)} />
                     </Tooltip>
                 </Space>
             ),
@@ -99,7 +102,7 @@ const RoleListForm = () => {
 
                     <div className="col-11 text-right mb-3">
                         <Button type="primary" icon={<PlusOutlined/>} onClick={handleAdd}>
-                            Сохранить
+                            Добавить
                         </Button>
                     </div>
 

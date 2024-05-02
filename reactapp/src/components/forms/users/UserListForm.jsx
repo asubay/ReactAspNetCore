@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import CustomTable from "@/components/widgets/tables/CustomTable.jsx";
 import { useNavigate } from "react-router-dom";
-import { fetchGetUsers } from "@/services/api.js";
-import { Layout, Spin, Space, Button, Tooltip } from 'antd';
+import { deleteUser, fetchGetUsers } from "@/services/api.js";
+import { Layout, Spin, Space, Button, Tooltip, message  } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import HeaderSection from "@/components/layout/Header.jsx";
-import Sidebar from "@/components/layout/Sidebar.jsx";
-import MenuSection from "@/components/layout/Menu.jsx";
 
 const { Content } = Layout;
 
@@ -14,6 +11,7 @@ const UserListForm = () => {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
 
     useEffect(()=>
     {
@@ -31,7 +29,7 @@ const UserListForm = () => {
             }
         };
         fetchUsersList();
-    }, [])
+    }, [deleteSuccess])
 
     const handleEdit = async (record) => {
         try {
@@ -41,8 +39,13 @@ const UserListForm = () => {
         }
     };
 
-    const handleDelete = (key) => {
-        console.log('Delete record with key:', key);
+    const handleDelete = async (key) => {
+        const result = await deleteUser(key);
+        if (result === "Succeeded")
+        {
+            message.success('Пользователь успешно удален');
+            setDeleteSuccess(!deleteSuccess);
+        }           
     };
 
     const handleAdd = () => {
@@ -84,7 +87,7 @@ const UserListForm = () => {
                         <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
                     </Tooltip>
                     <Tooltip title="Удалить">
-                        <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.key)} />
+                        <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)} />
                     </Tooltip>
                 </Space>
             ),

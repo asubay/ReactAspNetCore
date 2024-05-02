@@ -22,7 +22,7 @@ public class Startup
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         
-        var connString = Configuration.GetConnectionString(Configuration["ConnectionStrings"]);
+        var connString = Configuration.GetConnectionString("Development");
         
         services.AddDbContext<ApplicationDbContext>(options => options
                 .UseNpgsql(connString)
@@ -73,7 +73,7 @@ public class Startup
             await next(); // Передача запроса далее по конвейеру
         });
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();  
         app.UseAuthorization();

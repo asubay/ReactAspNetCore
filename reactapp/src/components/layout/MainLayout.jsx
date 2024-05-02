@@ -19,7 +19,7 @@ const MainLayout = () => {
             />
         </Layout>
         <Layout className="layoutStyle">
-            <Outlet />)
+            <Outlet />
         </Layout>
     </>);
 };

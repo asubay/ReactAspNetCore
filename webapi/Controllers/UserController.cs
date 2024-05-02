@@ -112,4 +112,31 @@ public class UserController : ControllerBase
         await _db.SaveChangesAsync();
         return Content("Succeeded");
     }
+    
+    [HttpPost("UploadFile")]
+    public async Task<IActionResult> UploadFile()
+    {
+        try
+        {
+            var file = Request.Form.Files[0]; 
+
+            if (file.Length > 0)
+            {
+                var filePath = Path.Combine("uploads", file.FileName); 
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream); 
+                }
+                return Ok(new { message = "File uploaded successfully" });
+            }
+            else
+            {
+                return BadRequest("No file uploaded");
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex}");
+        }
+    }
 }

@@ -41,7 +41,7 @@ const HeaderSection = () => {
                 {isAuthenticated ? (
                     <>
                         <Col style={{ textAlign: 'right', marginLeft: 25 }}>
-                            Welcome, {user.userName}
+                            Добро пожаловать, {user.userName}
                         </Col>
                         <Col>
                             <div

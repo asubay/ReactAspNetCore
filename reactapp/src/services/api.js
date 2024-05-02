@@ -161,3 +161,16 @@ export const fetchLogout = async () =>  {
     }
 };
 
+export const uploadFile = async (formData) => {
+    try {
+        console.log(formData)
+        const response = await axios.post('user/UploadFile', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Ошибка при загрузке файла на сервер');
+    }
+};

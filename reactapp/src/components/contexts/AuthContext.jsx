@@ -66,11 +66,12 @@ export const AuthProvider = ({ children }) => {
     }, [navigateRef]);
 
     // Функция для выхода
-    const logout = () => {
+    const logout = async () => {
         setIsAuthenticated(false);
         setUser(null);
         setIsAdmin(false);
-        fetchLogout();
+        await fetchLogout();
+        navigateRef.current("/login");
     };
 
     const contextValue = {

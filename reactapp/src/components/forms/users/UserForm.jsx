@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Form, Input, Button, Row, Checkbox, Alert, Select } from 'antd';
 import { useNavigate, useLocation } from "react-router-dom";
-import HeaderSection from "@/components/layout/Header.jsx";
-import Sidebar from "@/components/layout/Sidebar.jsx";
-import MenuSection from "@/components/layout/Menu.jsx";
-import { saveUserData, fetchGetRoles, getUser} from "@/services/api.js";
+import { saveUserData, fetchGetRoles, getUser, uploadFile } from "@/services/api.js";
 import { UserOutlined, MailOutlined, PhoneOutlined, LockOutlined } from '@ant-design/icons';
+import CustomImgCrop from "@/components/widgets/uploads/CustomImgCrop.jsx";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -17,11 +15,19 @@ const UserForm = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [form] = Form.useForm();
     const [roles, setRoles] = useState([]);
+    const [fileList, setFileList] = useState([]);
 
     const handleFormSubmit = async (values) => {
         try {
             const id = recordId === null ? "0" : recordId;            
             const data = { ...values, id: id };
+
+            /*if (fileList.length > 0) {
+                const formData = new FormData();
+                formData.append('file', fileList[0].originFileObj);
+                await uploadFile(formData); 
+            }*/
+            
             await saveUserData(data);
             navigate("/user");
         } catch (error) {
@@ -67,6 +73,10 @@ const UserForm = () => {
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
+    };
+
+    const handleFileChange = (newFileList) => {
+        setFileList(newFileList);
     };
     
     return (
@@ -116,7 +126,10 @@ const UserForm = () => {
                                 name="phoneNumber"
                                 rules={[{ required: true, message: 'Введите номер телефона!' }]}
                             >
-                                <Input prefix={<PhoneOutlined />} placeholder="Номер телефона" />
+                                <Input prefix={<PhoneOutlined />}
+                                       addonBefore="+7"
+                                       maxLength={12}
+                                       placeholder="Номер телефона" />
                             </Form.Item>
 
                             <Form.Item
@@ -156,11 +169,18 @@ const UserForm = () => {
                                 <Checkbox>Активный</Checkbox>
                             </Form.Item>
 
+                            <Form.Item
+                                name="avatar"                               
+                                valuePropName="fileList"
+                            >
+                                <CustomImgCrop onChange={handleFileChange} maxCount={1} />
+                            </Form.Item>
+
                             <Form.Item>
                                 <Button type="primary" htmlType="submit">
                                     Сохранить
                                 </Button>
-                            </Form.Item>
+                            </Form.Item>                            
                         </Form>
                     </div>
                 </Row>

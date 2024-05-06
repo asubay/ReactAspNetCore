@@ -1,9 +1,9 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Models;
 using webapi.Service.Abstract;
 using webapi.Utils;
+using webapi.ViewModels.Auth;
+using webapi.ViewModels.User;
 
 namespace webapi.Controllers;
 
@@ -14,12 +14,14 @@ public class AuthController : ControllerBase
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly IAccountService _accountService;
+    private readonly ILogger<AuthController> _logger;
     public AuthController(UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager, IAccountService accountService)
+        SignInManager<IdentityUser> signInManager, IAccountService accountService, ILogger<AuthController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _accountService = accountService;
+        _logger = logger;
     }
     
     [HttpPost("Login")]
@@ -30,12 +32,16 @@ public class AuthController : ControllerBase
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
             {
-                return BadRequest("Authentication error: user not found");
+                string message = "Authentication error: user not found";
+                _logger.LogWarning(message);
+                return BadRequest(message);
             }
             var checkPassword = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
             if (checkPassword.IsLockedOut)
             {
-                return BadRequest("Authentication error: user has blocked");
+                string message = "Authentication error: password error";
+                _logger.LogWarning(message);
+                return BadRequest(message);
             }
             
             var result = await _signInManager

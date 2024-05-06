@@ -1,192 +1,219 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Form, Input, Button, Row, Checkbox, Alert, Select } from 'antd';
+import React, { useState, useEffect } from "react";
+import {
+  Layout,
+  Form,
+  Input,
+  Button,
+  Row,
+  Checkbox,
+  Alert,
+  Select,
+} from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
-import { saveUserData, fetchGetRoles, getUser, uploadFile } from "@/services/api.js";
-import { UserOutlined, MailOutlined, PhoneOutlined, LockOutlined } from '@ant-design/icons';
+import {
+  saveUserData,
+  fetchGetRoles,
+  getUser,
+  uploadFile,
+} from "@/services/api.js";
+import {
+  UserOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  LockOutlined,
+} from "@ant-design/icons";
 import CustomImgCrop from "@/components/widgets/uploads/CustomImgCrop.jsx";
 
 const { Content } = Layout;
 const { Option } = Select;
 
 const UserForm = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const recordId = location.state && location.state.recordId;
-    const [errorMessage, setErrorMessage] = useState('');
-    const [form] = Form.useForm();
-    const [roles, setRoles] = useState([]);
-    const [fileList, setFileList] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const recordId = location.state && location.state.recordId;
+  const [errorMessage, setErrorMessage] = useState("");
+  const [form] = Form.useForm();
+  const [roles, setRoles] = useState([]);
+  
 
-    const handleFormSubmit = async (values) => {
-        try {
-            const id = recordId === null ? "0" : recordId;            
-            const data = { ...values, id: id };
+  const handleFormSubmit = async (values) => {
+    try {
+      console.log("handleFormSubmit")
+      const id = recordId === null ? "0" : recordId;
+      const data = { ...values, id: id };
 
-            /*if (fileList.length > 0) {
+      /*if (fileList.length > 0) {
                 const formData = new FormData();
                 formData.append('file', fileList[0].originFileObj);
                 await uploadFile(formData); 
             }*/
-            
-            await saveUserData(data);
-            navigate("/user");
-        } catch (error) {
-            setErrorMessage(error.message);
-        }
+
+      await saveUserData(data);
+      navigate("/user");
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (recordId) {
+      getUser(recordId)
+        .then((data) => {
+          form.setFieldsValue({
+            username: data.username,
+            id: data.id,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            isActive: data.isActive,
+            role: data.role,
+          });
+        })
+        .catch((error) => {
+          setErrorMessage(error.message);
+        });
+    }
+  }, [recordId]);
+
+  useEffect(() => {
+    const fetchRolesList = async () => {
+      try {
+        const data = await fetchGetRoles();
+        setRoles(data);
+      } catch (error) {
+        console.error("Error fetching get roles:", error);
+      } finally {
+        console.log("Success get roles");
+      }
     };
+    fetchRolesList();
+  }, []);
 
-    useEffect(() => {
-        if (recordId) {
-            getUser(recordId)
-                .then(data => {                    
-                    form.setFieldsValue({
-                        username: data.username,
-                        id: data.id,
-                        email: data.email,
-                        phoneNumber: data.phoneNumber,
-                        isActive: data.isActive,
-                        role: data.role
-                    });
-                })
-                .catch(error => {
-                    setErrorMessage(error.message);
-                });
-        }
-    }, [recordId]);
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+  
+  return (
+    <>
+      <Content>
+        <div className="container-fluid">
+          <div className="row mt-3">
+            <div>
+              <h3 style={{ textAlign: "left" }}>
+                {recordId ? "Редактирование" : "Добавление нового пользователя"}
+              </h3>
+              <hr />
+            </div>
+          </div>
+        </div>
+        <Row
+          justify="center"
+          align="middle"
+          style={{ backgroundColor: "white" }}
+        >
+          <div className="col-6 mt-4">
+            <Form
+              form={form}
+              name="edit_user"
+              onFinish={handleFormSubmit}
+              onFinishFailed={onFinishFailed}
+            >
+              {errorMessage && (
+                <Alert
+                  message={errorMessage}
+                  type="error"
+                  showIcon
+                  style={{ marginBottom: "16px" }}
+                />
+              )}
+              <Form.Item name="id" hidden>
+                <Input />
+              </Form.Item>
 
-    useEffect(()=>
-    {        
-        const fetchRolesList = async () => {
-            try {
-                const data = await fetchGetRoles();
-                setRoles(data);
+              <Form.Item
+                name="username"
+                rules={[{ required: true, message: "Введите логин!" }]}
+              >
+                <Input prefix={<UserOutlined />} placeholder="Логин" />
+              </Form.Item>
 
-            } catch (error) {
-                console.error('Error fetching get roles:', error);
-            }
-            finally {
-                console.log('Success get roles')                
-            }
-        };
-        fetchRolesList();
-    }, [])
+              <Form.Item
+                name="email"
+                rules={[{ required: true, message: "Введите email!" }]}
+              >
+                <Input prefix={<MailOutlined />} placeholder="Email" />
+              </Form.Item>
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+              <Form.Item
+                name="phoneNumber"
+                rules={[{ required: true, message: "Введите номер телефона!" }]}
+              >
+                <Input
+                  prefix={<PhoneOutlined />}
+                  addonBefore="+7"
+                  maxLength={12}
+                  placeholder="Номер телефона"
+                />
+              </Form.Item>
 
-    const handleFileChange = (newFileList) => {
-        setFileList(newFileList);
-    };
-    
-    return (
-        <>
-            <Content>
-                <div className="container-fluid">
-                    <div className="row mt-3">
-                        <div>
-                            <h3 style={{textAlign: "left"}}>
-                                {recordId ? ("Редактирование") : ("Добавление нового пользователя")}
-                            </h3>
-                            <hr/>
-                        </div>
-                    </div>
-                </div>
-                <Row justify="center" align="middle" style={{backgroundColor:"white"}}>
-                    <div className="col-6 mt-4">
-                        <Form
-                            form={form}
-                            name="edit_user"
-                            onFinish={handleFormSubmit}
-                            onFinishFailed={onFinishFailed}>
+              <Form.Item
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Введите пароль!",
+                  },
+                  {
+                    min: 6,
+                    message: "Пароль должен содержать минимум 6 символов!",
+                  },
+                  {
+                    pattern:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]+$/,
+                    message:
+                      "Пароль должен содержать хотя бы одну строчную и заглавную буквы, одну цифру и один специальный символ!",
+                  },
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder="Пароль"
+                />
+              </Form.Item>
 
-                            {errorMessage && (
-                                <Alert message={errorMessage} type="error" showIcon
-                                       style={{marginBottom: '16px'}}/>
-                            )}
-                            <Form.Item name="id" hidden>
-                                <Input/>
-                            </Form.Item>
+              <Form.Item
+                name="role"
+                rules={[
+                  { required: true, message: "Выберите роль для пользователя" },
+                ]}
+              >
+                <Select placeholder="Роль">
+                  {roles.map((role) => (
+                    <Option key={role.id} value={role.id}>
+                      {role.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-                            <Form.Item
-                                name="username"
-                                rules={[{ required: true, message: 'Введите логин!' }]}
-                            >
-                                <Input prefix={<UserOutlined />} placeholder="Логин" />
-                            </Form.Item>
+              <Form.Item name="isActive" valuePropName="checked">
+                <Checkbox>Активный</Checkbox>
+              </Form.Item>
 
-                            <Form.Item
-                                name="email"
-                                rules={[{ required: true, message: 'Введите email!' }]}
-                            >
-                                <Input prefix={<MailOutlined />} placeholder="Email" />
-                            </Form.Item>
+              <Form.Item name="avatar" valuePropName="fileList">
+                <CustomImgCrop onChange={(fileList) => console.log('Список файлов:', fileList)} maxCount={1} caption={'+ аватар'} />
+              </Form.Item>
 
-                            <Form.Item
-                                name="phoneNumber"
-                                rules={[{ required: true, message: 'Введите номер телефона!' }]}
-                            >
-                                <Input prefix={<PhoneOutlined />}
-                                       addonBefore="+7"
-                                       maxLength={12}
-                                       placeholder="Номер телефона" />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Введите пароль!'
-                                    },
-                                    {
-                                        min: 6,
-                                        message: 'Пароль должен содержать минимум 6 символов!'
-                                    },
-                                    {
-                                        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]+$/,
-                                        message: 'Пароль должен содержать хотя бы одну строчную и заглавную буквы, одну цифру и один специальный символ!'
-                                    }
-                                ]}
-                            >
-                                <Input.Password prefix={<LockOutlined />} placeholder="Пароль" />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="role"
-                                rules={[{ required: true, message: 'Выберите роль для пользователя' }]}
-                            >
-                                <Select placeholder="Роль">
-                                    {roles.map((role) => (
-                                        <Option key={role.id} value={role.id}>
-                                            {role.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-
-                            <Form.Item name="isActive" valuePropName="checked">
-                                <Checkbox>Активный</Checkbox>
-                            </Form.Item>
-
-                            <Form.Item
-                                name="avatar"                               
-                                valuePropName="fileList"
-                            >
-                                <CustomImgCrop onChange={handleFileChange} maxCount={1} />
-                            </Form.Item>
-
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Сохранить
-                                </Button>
-                            </Form.Item>                            
-                        </Form>
-                    </div>
-                </Row>
-            </Content>
-        </>
-    );
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Сохранить
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </Row>
+      </Content>
+    </>
+  );
 };
 
 export default UserForm;

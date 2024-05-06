@@ -1,9 +1,6 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+namespace webapi.ViewModels.User;
 
-namespace webapi.Models;
-
-public class CreateUserViewModel
+public class UserEditModel
 {
     public string Id { get; set; } 
     public string Username { get; set; }

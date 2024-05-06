@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Data;
 using webapi.Models;
+using webapi.ViewModels.Role;
 
 namespace webapi.Controllers;
 

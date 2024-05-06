@@ -1,4 +1,4 @@
-namespace webapi.models;
+namespace webapi.ViewModels.Weather;
 
 public class WeatherForecastViewModel
 {

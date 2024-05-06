@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using webapi.Data;
-using webapi.Models;
 using webapi.Service.Abstract;
+using webapi.ViewModels.User;
 
 namespace webapi.Service;
 
@@ -45,37 +45,37 @@ public class AccountService : IAccountService
     private async Task<UserInformation> GetCurrentUserFromDbAsync(string username)
     {
         var currentUser = await _userManager.FindByNameAsync(username);
-        if (currentUser == null)
+        if (currentUser != null)
         {
-            return null;
+            var roles = await _userManager.GetRolesAsync(currentUser);
+            var roleName = roles.FirstOrDefault();
+            var role = await _db.Roles.FirstOrDefaultAsync(x => x.Name == roleName);
+
+            return new UserInformation
+            {
+                Id = currentUser.Id,
+                UserName = currentUser.UserName,
+                Role = role?.Id,
+                IsAdmin = role?.Name == "admin",
+                Email = currentUser.Email,
+                PhoneNumber = currentUser.PhoneNumber,
+                SessionId = _userSession
+            };
         }
 
-        var roles = await _userManager.GetRolesAsync(currentUser);
-        var roleName = roles.FirstOrDefault();
-        var role = await _db.Roles.FirstOrDefaultAsync(x => x.Name == roleName);
-
-        return new UserInformation
-        {
-            Id = currentUser.Id,
-            UserName = currentUser.UserName,
-            Role = role?.Id,
-            IsAdmin = role?.Name == "admin",
-            Email = currentUser.Email,
-            PhoneNumber = currentUser.PhoneNumber,
-            SessionId = _userSession
-        };
+        return null;
     }
     
     public async Task<UserInformation> GetCurrentUserAsync()
     {
-        if (_user != null && _user.Identity != null && _user.Identity.IsAuthenticated)
+        if (_user.Identity != null && _user.Identity.IsAuthenticated)
         {
             var userName = _user.Identity.Name;
             if (!string.IsNullOrEmpty(userName))
             {
-                if (_memoryCache.TryGetValue(userName, out UserInformation cachedUserInfo))
+                if (_memoryCache.TryGetValue(userName, out UserInformation? cachedUserInfo))
                 {
-                    return cachedUserInfo;
+                    if (cachedUserInfo != null) return cachedUserInfo;
                 }
             }
         }

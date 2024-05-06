@@ -1,11 +1,10 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using webapi.Service;
 using webapi.Service.Abstract;
 using Serilog;
 using webapi.Data;
-using webapi.Models;
 
 namespace webapi;
 
@@ -18,7 +17,7 @@ public class Startup
         Configuration = configuration;
     }
     
-    public void ConfigureServices(IServiceCollection services) //контейнер, в котором вы регистрируются службы
+    public void ConfigureServices(IServiceCollection services) 
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         
@@ -38,19 +37,24 @@ public class Startup
             // Установка времени жизни сессии и других параметров
             options.IdleTimeout = TimeSpan.FromMinutes(3600);
             options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true; // Важно для GDPR и CCPA compliance
+            options.Cookie.IsEssential = true; 
         });
         
         services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         
+        services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 52428800;
+        });
+        
         services.AddControllers();
         services.AddEndpointsApiExplorer(); //используется для регистрации сервиса, который предоставляет информацию об обнаруженных конечных точках (endpoints)
         services.AddSwaggerGen();
         services.AddScoped<IWeatherForecastService, WeatherForecastService>(); // Регистрация службы с жизненным циклом Scoped
         services.AddScoped<IAccidentService, AccidentService>();
-        services.AddSignalR(); //SignalR - это библиотека, которая обеспечивает возможность создания веб-приложений с реальным временем обмена сообщениями между сервером и клиентом
+        services.AddSignalR(); 
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -66,14 +70,14 @@ public class Startup
             app.UseHsts();
         }
 
-        app.UseStaticFiles(); // Позволяет обслуживать статические файлы из wwwroot
+        app.UseStaticFiles(); 
 
         app.Use(async (context, next) =>
         {
             await next(); // Передача запроса далее по конвейеру
         });
 
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();  
         app.UseAuthorization();
@@ -85,7 +89,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapHub<SessionHub>("/sessionHub");
-            endpoints.MapControllers(); // Позволяет обслуживать API-маршруты
+            endpoints.MapControllers(); 
         });
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using webapi.models;
 using webapi.Service.Abstract;
+using webapi.ViewModels.Weather;
 
 namespace webapi.Controllers;
 
@@ -8,12 +9,10 @@ namespace webapi.Controllers;
 [Route("api/weatherforecast")]
 public class WeatherForecastController : ControllerBase
 {
-    private readonly ILogger<WeatherForecastController> _logger;
     private readonly IWeatherForecastService _service;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherForecastService service)
+    public WeatherForecastController(IWeatherForecastService service)
     {
-        _logger = logger;
         _service = service;
     }
 

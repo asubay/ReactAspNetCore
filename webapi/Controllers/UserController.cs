@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Data;
 using webapi.Models;
+using webapi.ViewModels.User;
 
 namespace webapi.Controllers;
 
@@ -33,7 +34,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("EditUser")]
-    public async Task<IActionResult> Edit(CreateUserViewModel model)
+    public async Task<IActionResult> Edit(UserEditModel model)
     {
         if (ModelState.IsValid)
         {
@@ -81,7 +82,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("GetUser")]
-    public async Task<CreateUserViewModel> Get(string id)
+    public async Task<UserEditModel> Get(string id)
     {
         var user = string.IsNullOrEmpty(id)
             ? new IdentityUser()
@@ -89,7 +90,7 @@ public class UserController : ControllerBase
 
         var userRoles = _db.UserRoles.FirstOrDefault(f => f.UserId == id)?.RoleId;
 
-        var model = new CreateUserViewModel
+        var model = new UserEditModel
         {
             Id = user.Id,
             Email = user.Email,
@@ -111,32 +112,5 @@ public class UserController : ControllerBase
         _db.Users.Remove(row);
         await _db.SaveChangesAsync();
         return Content("Succeeded");
-    }
-    
-    [HttpPost("UploadFile")]
-    public async Task<IActionResult> UploadFile()
-    {
-        try
-        {
-            var file = Request.Form.Files[0]; 
-
-            if (file.Length > 0)
-            {
-                var filePath = Path.Combine("uploads", file.FileName); 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream); 
-                }
-                return Ok(new { message = "File uploaded successfully" });
-            }
-            else
-            {
-                return BadRequest("No file uploaded");
-            }
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex}");
-        }
     }
 }

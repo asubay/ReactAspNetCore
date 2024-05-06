@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using webapi.Service.Abstract;
 
-namespace webapi.Models;
+namespace webapi.Service;
 
 public class SessionHub : Hub
 {

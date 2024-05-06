@@ -5,7 +5,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        CreateHostBuilder(args).Build().Run(); // создание и запуск веб-хоста
+        CreateHostBuilder(args).Build().Run();
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -18,6 +18,6 @@ public static class Program
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>(); // Загрузка класса Startup
+                webBuilder.UseStartup<Startup>();
             });
 }

@@ -1,6 +1,6 @@
-namespace webapi.Models;
+namespace webapi.ViewModels.Role;
 
-public class RoleViewModel
+public class RoleEditModel
 {
     public string Id { get; set; }
     public string Name { get; set; }

@@ -24,6 +24,7 @@ public class AuthController : ControllerBase
         _logger = logger;
     }
     
+    /// <summary>Вход в проект</summary>
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
@@ -61,6 +62,7 @@ public class AuthController : ControllerBase
         return BadRequest("Authentication error: invalid credentials");
     }
     
+    /// <summary>Получить профиль текущего пользователя</summary>
     [HttpGet("GetCurrentUser")]
     public async Task<ActionResult<UserInformation>> GetCurrentUser()
     {
@@ -72,12 +74,10 @@ public class AuthController : ControllerBase
         return BadRequest("Authentication error: invalid credentials");
     }
     
+    /// <summary>Выход из проекта</summary>
     [HttpPost("Logout")]
     public async Task<IActionResult> Logout() {
         await _signInManager.SignOutAsync();
-        return Ok();
+        return NoContent();
     }
 }
-
-
-

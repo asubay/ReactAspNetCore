@@ -16,9 +16,11 @@ public class AccountService : IAccountService
     private readonly ApplicationDbContext _db;
     private readonly ClaimsPrincipal _user;
     private readonly string _userSession;
+    private readonly IUserService _userService;
     
     public AccountService(IHttpContextAccessor httpContextAccessor,
-        IMemoryCache memoryCache, UserManager<IdentityUser> userManager, ApplicationDbContext db)
+        IMemoryCache memoryCache, UserManager<IdentityUser> userManager, ApplicationDbContext db, 
+        IUserService userService)
     {
         _httpContextAccessor = httpContextAccessor;
         _userManager = userManager;
@@ -26,6 +28,7 @@ public class AccountService : IAccountService
         _db = db;
         _user = httpContextAccessor.HttpContext?.User;
         _userSession = httpContextAccessor.HttpContext?.Session.Id;
+        _userService = userService;
     }
 
     public async Task KeepSessionAlive(string user)
@@ -50,6 +53,7 @@ public class AccountService : IAccountService
             var roles = await _userManager.GetRolesAsync(currentUser);
             var roleName = roles.FirstOrDefault();
             var role = await _db.Roles.FirstOrDefaultAsync(x => x.Name == roleName);
+            var avatar = await _userService.GetPhoto(currentUser.Id);
 
             return new UserInformation
             {
@@ -59,7 +63,8 @@ public class AccountService : IAccountService
                 IsAdmin = role?.Name == "admin",
                 Email = currentUser.Email,
                 PhoneNumber = currentUser.PhoneNumber,
-                SessionId = _userSession
+                SessionId = _userSession,
+                AvatarByte = avatar.Byte,
             };
         }
 
@@ -75,7 +80,10 @@ public class AccountService : IAccountService
             {
                 if (_memoryCache.TryGetValue(userName, out UserInformation? cachedUserInfo))
                 {
-                    if (cachedUserInfo != null) return cachedUserInfo;
+                    if (cachedUserInfo != null)
+                    {
+                        return cachedUserInfo;
+                    }
                 }
             }
         }

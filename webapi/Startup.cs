@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using webapi.Service;
 using webapi.Service.Abstract;
 using Serilog;
 using webapi.Data;
+using webapi.Initialization;
 
 namespace webapi;
 
@@ -17,20 +17,10 @@ public class Startup
         Configuration = configuration;
     }
     
-    public void ConfigureServices(IServiceCollection services) 
+    public void ConfigureServices(IServiceCollection services)
     {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        
-        var connString = Configuration.GetConnectionString("Development");
-        
-        services.AddDbContext<ApplicationDbContext>(options => options
-                .UseNpgsql(connString)
-                
-        ); 
-        
-       services.AddScoped<IAccountService, AccountService>();
-       services.AddDistributedMemoryCache(); // для синхронизации кэша между разными экземплярами приложения, запущенными на разных серверах или контейнерах
-       services.AddMemoryCache(); //добавляет простое хранилище кэша в памяти приложения
+        ConfigureDependencyInjection(services);
+        ConfigureDatabase(services);
         
         services.AddSession(options =>
         {
@@ -43,20 +33,44 @@ public class Startup
         services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+        ConfigureWeb(services);
+    }
+
+    private static void ConfigureDependencyInjection(IServiceCollection services)
+    {
+        // Singletons
+        services.AddSingleton<IUserIdProvider, AspNetUserIdProvider>();
+        // Generic interfaces
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IWeatherForecastService, WeatherForecastService>(); 
+        services.AddScoped<IAccidentService, AccidentService>();
+        services.AddScoped<IFileHasher, FileHasher>();
+        services.AddScoped<IFileUploadService, FileUploadService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IFileCategoryService, FileCategoryService>();
+    }
+
+    private void ConfigureDatabase(IServiceCollection services)
+    {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         
-        services.Configure<FormOptions>(options =>
-        {
-            options.MultipartBodyLengthLimit = 52428800;
-        });
+        var connString = Configuration.GetConnectionString("Development");
         
+        services.AddDbContext<ApplicationDbContext>(options => options
+            .UseNpgsql(connString)
+        ); 
+    }
+
+    private void ConfigureWeb(IServiceCollection services)
+    {
         services.AddControllers();
         services.AddEndpointsApiExplorer(); //используется для регистрации сервиса, который предоставляет информацию об обнаруженных конечных точках (endpoints)
         services.AddSwaggerGen();
-        services.AddScoped<IWeatherForecastService, WeatherForecastService>(); // Регистрация службы с жизненным циклом Scoped
-        services.AddScoped<IAccidentService, AccidentService>();
+        services.AddDistributedMemoryCache();
+        services.AddMemoryCache(); //добавляет простое хранилище кэша в памяти приложения
         services.AddSignalR(); 
     }
-    
+
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
@@ -71,9 +85,17 @@ public class Startup
         }
 
         app.UseStaticFiles(); 
+        app.UseMiddleware<FileSizeLimitMiddleware>();
+        app.UseMiddleware<ImageCompressionMiddleware>();
 
         app.Use(async (context, next) =>
         {
+            if (context.Request.ContentLength > 30 * 1024 * 1024)
+            {
+                context.Response.StatusCode = StatusCodes.Status413PayloadTooLarge;
+                await context.Response.WriteAsync("File size exceeds limit.");
+                return;
+            }
             await next(); // Передача запроса далее по конвейеру
         });
 
@@ -81,11 +103,8 @@ public class Startup
         app.UseRouting();
         app.UseAuthentication();  
         app.UseAuthorization();
-        
         app.UseSerilogRequestLogging(); 
-        
         app.UseSession();
-
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapHub<SessionHub>("/sessionHub");

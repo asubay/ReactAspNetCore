@@ -5,14 +5,24 @@ namespace webapi.Utils;
 public static class PathUtils
 {
     public static string GetAppDir() {
-        return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var location = Assembly.GetEntryAssembly()?.Location;
+
+        if (string.IsNullOrEmpty(location)) {
+            throw new InvalidOperationException("entry assembly not found or its location is empty");
+        }
+
+        return Path.GetDirectoryName(location)
+               ?? throw new InvalidOperationException("app directory not found");
     }
 
-    public static string GetStateDirectory() {
-        var stateDir = Environment.GetEnvironmentVariable("STATE_DIRECTORY");
-        if (string.IsNullOrEmpty(stateDir)) {
-            stateDir = GetAppDir();
+    public static string GetStateDirectory(string subDir) {
+        var root = Environment.GetEnvironmentVariable("STATE_DIRECTORY") ??
+                   GetAppDir();
+
+        var dir = Path.Join(root, subDir);
+        if (!Directory.Exists(dir)) {
+            Directory.CreateDirectory(dir);
         }
-        return Path.Join(stateDir, "data");
+        return dir;
     }
 }

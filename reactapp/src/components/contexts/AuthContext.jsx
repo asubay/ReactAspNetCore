@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
   useCallback,
+  useMemo
 } from "react";
 import {
   fetchLogin,
@@ -31,12 +32,14 @@ function useNavigateRef() {
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);  
   const navigateRef = useNavigateRef();
+  const [loading, setLoading] = useState(true);
 
   //проверка актуальности сессии, в случая успеха возвращает инфо о пользователе
   useEffect(() => {
     const checkAuthentication = async () => {
+      setLoading(true);
       try {
         const response = await getAuthenticationInfo();
         if (response) {
@@ -46,11 +49,15 @@ export const AuthProvider = ({ children }) => {
           }
           setUser(response);
         }
-      } catch (error) {
+      } 
+      catch (error) {        
         setIsAuthenticated(false);
         setUser(null);
         setIsAdmin(false);
-        console.error("Error checking authentication:", error);
+        navigateRef.current("/login");
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -63,7 +70,8 @@ export const AuthProvider = ({ children }) => {
       try {
         const response = await fetchLogin(data);
         setIsAuthenticated(true);
-        setUser(response);
+        setUser(response);       
+        
         if (response.isAdmin) {
           setIsAdmin(true);
         }
@@ -76,24 +84,27 @@ export const AuthProvider = ({ children }) => {
   );
 
   // Функция для выхода
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setIsAuthenticated(false);
     setUser(null);
     setIsAdmin(false);
     await fetchLogout();
     navigateRef.current("/login");
-  };
+  }, [navigateRef]);
 
-  const contextValue = {
+  const contextValue = useMemo(() => ({
     isAuthenticated,
     isAdmin,
     user,
     login,
     logout,
-  };
+    loading,
+  }), [isAuthenticated, isAdmin, user, login, logout, loading]);
 
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+      <AuthContext.Provider value={contextValue}>
+        {children}
+      </AuthContext.Provider>
   );
 };
 export default AuthProvider;

@@ -2,15 +2,21 @@ using Microsoft.AspNetCore.Identity;
 using Audit.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using webapi.Models;
+using webapi.Models.Base;
+using webapi.Service.Abstract;
 using webapi.Utils;
 
 namespace webapi.Data;
 
 public partial class ApplicationDbContext : AuditIdentityDbContext<IdentityUser>
 {
+    private readonly IUserIdProvider _currentUserProvider;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+        _currentUserProvider = this.GetService<IUserIdProvider>();
         ChangeTracker.Tracked += ChangeTrackerOnTracked;
         ChangeTracker.StateChanged += ChangeTrackerOnStateChanged;
     }
@@ -28,17 +34,50 @@ public partial class ApplicationDbContext : AuditIdentityDbContext<IdentityUser>
          */
         builder.HasPostgresExtension("postgis");
         ConvertNamesToSnakeCase(builder);
-
+        ConfigureModels(builder);
     }
 
     private void ChangeTrackerOnTracked(object sender, EntityTrackedEventArgs e)
     {
+        if (!(e.Entry.Entity is DbEntity entity)) {
+            return;
+        }
+        switch (e.Entry.State) {
+            case EntityState.Added:
+                // Проставляем дату создания только во вновь созданных, пропускаем загруженные из БД.
+                if (!e.FromQuery) {
+                    if (string.IsNullOrEmpty(entity.AppUserId)) {
+                        entity.AppUserId = _currentUserProvider.TryGetCurrentUserId();
+                    }
+                    entity.CreatedAt = DateTime.Now;
+                }
+                break;
+            case EntityState.Modified:
+                e.Entry.Property(nameof(entity.CreatedAt)).IsModified = false;
+                entity.ModifiedAt = DateTime.Now;
+                break;
+        }
     }
 
     private static void ChangeTrackerOnStateChanged(object sender, EntityStateChangedEventArgs e)
     {
+        if (!(e.Entry.Entity is DbEntity entity)) {
+            return;
+        }
+        switch (e.NewState) {
+            case EntityState.Modified:
+                e.Entry.Property(nameof(entity.CreatedAt)).IsModified = false;
+                entity.ModifiedAt = DateTime.Now;
+                break;
+        }
     }
-    
+
+    private void ConfigureModels(ModelBuilder builder)
+    {
+        builder.Entity<UserFile>()
+            .HasKey(e => new { e.FileId, e.UserId });
+    }
+
     private static void ConvertNamesToSnakeCase(ModelBuilder builder) {
         foreach (var type in builder.Model.GetEntityTypes()) {
             var table = type.GetTableName().ToSnakeCase();

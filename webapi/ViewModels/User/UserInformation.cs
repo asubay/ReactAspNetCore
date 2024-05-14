@@ -9,4 +9,5 @@ public class UserInformation
     public string? Role { get; set; }
     public bool IsAdmin { get; set; }
     public string SessionId { get; set; }
+    public byte[] AvatarByte { get; set; }
 }

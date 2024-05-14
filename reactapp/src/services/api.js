@@ -44,11 +44,14 @@ export const fetchLogin = async (data) => {
 };
 
 export const getAuthenticationInfo = async () => {
+  
   try {
     const response = await api.get(`/auth/GetCurrentUser`);
     return response.data;
   } catch (error) {
     console.error("Error checking authentication:", error);
+    
+    throw error;
   }
 };
 
@@ -142,7 +145,7 @@ export const getUser = async (id) => {
 
 export const deleteUser = async (id) => {
   try {
-    const response = await api.post("/user/DeleteUser", id.toString());
+    const response = await api.delete(`/user/DeleteUser/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error while deleting user:", error);
@@ -169,5 +172,27 @@ export const uploadFile = async (formData) => {
     return response.data;
   } catch (error) {
     throw new Error("Ошибка при загрузке файла на сервер");
+  }
+};
+
+export const fetchGetUserPhoto = async (userId) => {
+  try {
+    const response = await api.get(`/user/GetUserPhoto`, {
+      params: {
+        userId: userId,
+      },
+      responseType: 'arraybuffer',
+    });
+    const base64 = btoa(
+        new Uint8Array(response.data).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ''
+        )
+    );
+    return `data:image/jpeg;base64,${base64}`;    
+   
+  } catch (error) {
+    console.error("Error fetch Accident:", error);
+    throw error;
   }
 };

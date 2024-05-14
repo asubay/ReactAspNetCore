@@ -9,4 +9,5 @@ public class UserEditModel
     public string Password { get; set; }
     public string Role { get; set; }
     public bool IsActive { get; set; }
+    public int? PhotoId { get; set; }
 }

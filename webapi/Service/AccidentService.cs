@@ -7,8 +7,8 @@ public class AccidentService : IAccidentService
 {
     public async Task<string> GetAccidentDataPath()
     {
-        var appRootPath = PathUtils.GetStateDirectory();
-        var filePathName = Path.Combine(appRootPath, "files", "export.json");
+        var appRootPath = PathUtils.GetStateDirectory("files");
+        var filePathName = Path.Combine(appRootPath, "export.json");
         var path = Path.Combine(appRootPath, filePathName);
         if (!string.IsNullOrEmpty(path)) {
             return path;

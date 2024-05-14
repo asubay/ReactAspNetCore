@@ -13,8 +13,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
   saveUserData,
   fetchGetRoles,
-  getUser,
-  uploadFile,
+  getUser,  
 } from "@/services/api.js";
 import {
   UserOutlined,
@@ -33,21 +32,12 @@ const UserForm = () => {
   const recordId = location.state && location.state.recordId;
   const [errorMessage, setErrorMessage] = useState("");
   const [form] = Form.useForm();
-  const [roles, setRoles] = useState([]);
-  
+  const [roles, setRoles] = useState([]);  
 
   const handleFormSubmit = async (values) => {
-    try {
-      console.log("handleFormSubmit")
+    try {      
       const id = recordId === null ? "0" : recordId;
       const data = { ...values, id: id };
-
-      /*if (fileList.length > 0) {
-                const formData = new FormData();
-                formData.append('file', fileList[0].originFileObj);
-                await uploadFile(formData); 
-            }*/
-
       await saveUserData(data);
       navigate("/user");
     } catch (error) {
@@ -86,7 +76,7 @@ const UserForm = () => {
       }
     };
     fetchRolesList();
-  }, []);
+  }, []);  
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -200,7 +190,10 @@ const UserForm = () => {
               </Form.Item>
 
               <Form.Item name="avatar" valuePropName="fileList">
-                <CustomImgCrop onChange={(fileList) => console.log('Список файлов:', fileList)} maxCount={1} caption={'+ аватар'} />
+                <CustomImgCrop onChange={(fileList) => console.log('Список файлов:', fileList)}
+                               maxCount={1} 
+                               caption={'+ аватар'} 
+                               id={recordId} />
               </Form.Item>
 
               <Form.Item>

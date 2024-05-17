@@ -10,4 +10,5 @@ public interface IFileUploadService
     Task<FileCheckResult> CheckFile(IFormFile file, FileType fileType);
     Task<byte[]> Load(int imageId);
     Task<bool> DeleteFile(int fileId);
+    Task<byte[]> ReadData(string filePath);
 }

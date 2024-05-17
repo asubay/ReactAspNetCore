@@ -40,12 +40,9 @@ const UserListForm = () => {
     };
 
     const handleDelete = async (key) => {
-        const result = await deleteUser(key);
-        if (result === "Succeeded")
-        {
-            message.success('Пользователь успешно удален');
-            setDeleteSuccess(!deleteSuccess);
-        }           
+        await deleteUser(key);
+        message.success('Пользователь успешно удален');
+        setDeleteSuccess(!deleteSuccess);        
     };
 
     const handleAdd = () => {

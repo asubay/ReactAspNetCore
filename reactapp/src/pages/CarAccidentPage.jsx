@@ -115,8 +115,8 @@ const CarAccidentPage = () => {
                   <MenuSection theme={"dark"}/>
                    <hr style={{color:"white"}}/>
                    <div className="sidebarContent">
-                       <div className="form-group">
-                           <h5 style={{color:"white"}}>Выберите года:</h5>
+                       <div className="form-group" >
+                           <h5 style={{color:"white", paddingLeft: '10px'}}>Выберите года:</h5>
                            <CustomMultiSelect
                                options={years}
                                placeholder="Выберите"

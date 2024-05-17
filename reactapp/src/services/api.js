@@ -29,8 +29,7 @@ export const fetchAccident = async () => {
   }
 };
 
-export const fetchLogin = async (data) => {
-  console.log(data.username);
+export const fetchLogin = async (data) => { 
   try {
     const response = await api.post(`/auth/Login`, {
       userName: data.username,
@@ -145,8 +144,7 @@ export const getUser = async (id) => {
 
 export const deleteUser = async (id) => {
   try {
-    const response = await api.delete(`/user/DeleteUser/${id}`);
-    return response.data;
+    await api.delete(`/user/DeleteUser/${id}`);   
   } catch (error) {
     console.error("Error while deleting user:", error);
     throw error;
@@ -161,38 +159,29 @@ export const fetchLogout = async () => {
   }
 };
 
-export const uploadFile = async (formData) => {
-  try {
-    
-    const response = await axios.post("user/UploadFile", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error("Ошибка при загрузке файла на сервер");
-  }
-};
-
 export const fetchGetUserPhoto = async (userId) => {
   try {
     const response = await api.get(`/user/GetUserPhoto`, {
-      params: {
-        userId: userId,
-      },
+      params: { userId },
       responseType: 'arraybuffer',
     });
+
+    if (!response.data) {
+      throw new Error('No data received');
+    }
+
     const base64 = btoa(
         new Uint8Array(response.data).reduce(
             (data, byte) => data + String.fromCharCode(byte),
             ''
         )
     );
-    return `data:image/jpeg;base64,${base64}`;    
-   
+    const mimeType = response.headers['content-type'];
+
+    return `data:${mimeType};base64,${base64}`;
+
   } catch (error) {
-    console.error("Error fetch Accident:", error);
+    console.error("Error fetching photo:", error);
     throw error;
   }
 };

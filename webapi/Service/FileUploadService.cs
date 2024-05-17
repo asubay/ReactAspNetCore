@@ -123,8 +123,14 @@ public class FileUploadService : IFileUploadService
         return await ReadData(image.FilePath);
     }
     
-    private async Task<byte[]> ReadData(string filePath) {
-        await using var stream = OpenForRead(filePath);
+    public async Task<byte[]> ReadData(string filePath) {
+        var fullPath = Path.Combine(_uploadDirectory, filePath);
+    
+        if (!File.Exists(fullPath)) {
+            return null;
+        }
+
+        await using var stream = OpenForRead(fullPath);
         using var memory = new MemoryStream();
         await stream.CopyToAsync(memory);
         return memory.ToArray();
@@ -132,6 +138,12 @@ public class FileUploadService : IFileUploadService
     
     private Stream OpenForRead(string filePath) {
         var fullPath = Path.Combine(_uploadDirectory, filePath);
+    
+        if (!File.Exists(fullPath))
+        {
+            return null;
+        }
+    
         return File.OpenRead(fullPath);
     }
     

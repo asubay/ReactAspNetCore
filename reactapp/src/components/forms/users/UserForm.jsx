@@ -9,12 +9,8 @@ import {
   Alert,
   Select,
 } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-  saveUserData,
-  fetchGetRoles,
-  getUser,  
-} from "@/services/api.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { saveUserData, fetchGetRoles, getUser } from "@/services/api.js";
 import {
   UserOutlined,
   MailOutlined,
@@ -27,27 +23,31 @@ const { Content } = Layout;
 const { Option } = Select;
 
 const UserForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const recordId = location.state && location.state.recordId;
+  const navigate = useNavigate();  
+  const { id } = useParams()
   const [errorMessage, setErrorMessage] = useState("");
   const [form] = Form.useForm();
-  const [roles, setRoles] = useState([]);  
+  const [roles, setRoles] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(id !== "0");  
 
   const handleFormSubmit = async (values) => {
-    try {      
-      const id = recordId === null ? "0" : recordId;
-      const data = { ...values, id: id };
-      await saveUserData(data);
-      navigate("/user");
+    try {
+      const userId = id === "0" ? "0" : id;
+      const data = { ...values, id: userId };
+      const savedUserId = await saveUserData(data);
+
+      if (id === "0") {
+        setIsEditMode(true);  // Устанавливаем режим редактирования
+        navigate(`/user/edit/${savedUserId}`);
+      }
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
 
-  useEffect(() => {
-    if (recordId) {
-      getUser(recordId)
+  useEffect(() => {    
+    if (isEditMode && id) {
+      getUser(id)
         .then((data) => {
           form.setFieldsValue({
             username: data.username,
@@ -62,7 +62,7 @@ const UserForm = () => {
           setErrorMessage(error.message);
         });
     }
-  }, [recordId]);
+  }, [id, isEditMode]);
 
   useEffect(() => {
     const fetchRolesList = async () => {
@@ -76,12 +76,12 @@ const UserForm = () => {
       }
     };
     fetchRolesList();
-  }, []);  
+  }, []);
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  
+
   return (
     <>
       <Content>
@@ -89,7 +89,7 @@ const UserForm = () => {
           <div className="row mt-3">
             <div>
               <h3 style={{ textAlign: "left" }}>
-                {recordId ? "Редактирование" : "Добавление нового пользователя"}
+                {isEditMode ? "Редактирование" : "Добавление нового пользователя"}
               </h3>
               <hr />
             </div>
@@ -188,13 +188,18 @@ const UserForm = () => {
               <Form.Item name="isActive" valuePropName="checked">
                 <Checkbox>Активный</Checkbox>
               </Form.Item>
-
-              <Form.Item name="avatar" valuePropName="fileList">
-                <CustomImgCrop onChange={(fileList) => console.log('Список файлов:', fileList)}
-                               maxCount={1} 
-                               caption={'+ аватар'} 
-                               id={recordId} />
-              </Form.Item>
+              {isEditMode && (
+                  <Form.Item name="avatar" valuePropName="fileList">
+                    <CustomImgCrop
+                        onChange={(fileList) =>
+                            console.log("Список файлов:", fileList)
+                        }
+                        maxCount={1}
+                        caption={"+ аватар"}
+                        id={id}
+                    />
+                  </Form.Item>
+              )}
 
               <Form.Item>
                 <Button type="primary" htmlType="submit">

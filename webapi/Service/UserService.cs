@@ -36,7 +36,7 @@ public class UserService : IUserService
         return users;
     }
 
-    public async Task Edit(UserEditModel model)
+    public async Task<string> Edit(UserEditModel model)
     {
         var user = await _userManager.FindByNameAsync(model.Username);
         bool isNewUser = user == null;
@@ -74,6 +74,8 @@ public class UserService : IUserService
                 }
             }
         }
+
+        return user.Id;
     }
 
     public async Task<UserEditModel> Get(string id)
@@ -129,6 +131,7 @@ public class UserService : IUserService
             Byte = await _file.Load(photo.FileId),
             FileType = photo.File.FileExtension,
             FileName = photo.File.FileName,
+            FilePath = photo.File.FilePath,
         };
 
         return response;

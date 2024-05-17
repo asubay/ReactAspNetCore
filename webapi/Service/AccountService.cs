@@ -64,7 +64,7 @@ public class AccountService : IAccountService
                 Email = currentUser.Email,
                 PhoneNumber = currentUser.PhoneNumber,
                 SessionId = _userSession,
-                AvatarByte = avatar.Byte,
+                AvatarByte = avatar != null ? avatar.Byte: null,
             };
         }
 

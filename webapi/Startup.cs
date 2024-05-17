@@ -99,7 +99,7 @@ public class Startup
             await next(); // Передача запроса далее по конвейеру
         });
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();  
         app.UseAuthorization();

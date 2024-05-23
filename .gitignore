@@ -10,3 +10,4 @@
 /node_modules
 /*.user
 /package-lock.json
+/webapi/*.sh

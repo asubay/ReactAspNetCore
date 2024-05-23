@@ -8,7 +8,7 @@ using webapi.ViewModels.User;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("api/user")]
+[Route("api/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly ApplicationDbContext _db;
@@ -35,7 +35,7 @@ public class UserController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error while get user list");
+            _logger.LogError(ex, "Error while getting user list");
             return StatusCode(500, "Internal server error");
         }
     }
@@ -63,31 +63,39 @@ public class UserController : ControllerBase
     [HttpGet("GetUser")]
     public async Task<ActionResult<UserEditModel>> Get(string id)
     {
-        var user = await _service.Get(id);
-        if (user == null)
+        try
         {
-            return NotFound();
+            var user = await _service.Get(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
-        return Ok(user);
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error while getting user with id {id}");
+            return StatusCode(500, "Internal server error");
+        }
     }
     
     [HttpDelete("DeleteUser/{id}")]
     public async Task<IActionResult> Delete(string id) {
-        var user = await _db.Users.FindAsync(id);
-        if (user == null)
-        {
-            return NotFound("User not found!");
-        }
-
-        _db.Users.Remove(user);
         try
         {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found!");
+            }
+
+            _db.Users.Remove(user);
             await _db.SaveChangesAsync();
             return NoContent();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error while delete user");
+            _logger.LogError(ex, $"Error while deleting user with id {id}");
             return StatusCode(500, "Internal server error");
         }
     }
@@ -96,14 +104,14 @@ public class UserController : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> SaveUserPhoto([FromForm] IFormFile file, string userId)
     {
-        var checkFile = await _file.CheckFile(file, FileType.Image);
-        if (!checkFile.IsValid)
-        {
-            return BadRequest("Invalid file format");
-        }
-
         try
         {
+            var checkFile = await _file.CheckFile(file, FileType.Image);
+            if (!checkFile.IsValid)
+            {
+                return BadRequest("Invalid file format");
+            }
+
             await using var stream = file.OpenReadStream();
             var model = new RequestFileModel
             {
@@ -117,7 +125,7 @@ public class UserController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error while save user photo");
+            _logger.LogError(ex, $"Error while saving photo for user with id {userId}");
             return StatusCode(500, "Internal server error");
         }
     }
@@ -125,17 +133,25 @@ public class UserController : ControllerBase
     [HttpGet("GetUserPhoto")]
     public async Task<IActionResult> GetUserPhoto(string userId)
     {
-        var photo = await _service.GetPhoto(userId);
-        if (photo == null)
+        try
         {
-            return NotFound();
+            var photo = await _service.GetPhoto(userId);
+            if (photo == null)
+            {
+                return NotFound();
+            }
+            var fileData = await _file.ReadData(photo.FilePath);
+            if (fileData == null)
+            {
+                return NotFound("File not found");
+            }
+            return File(photo.Byte, photo.FileType);
         }
-        var fileData = await _file.ReadData(photo.FilePath);
-        if (fileData == null)
+        catch (Exception ex)
         {
-            return NotFound("Файл не найден");
+            _logger.LogError(ex, $"Error while getting photo for user with id {userId}");
+            return StatusCode(500, "Internal server error");
         }
-        return File(photo.Byte, photo.FileType);
     }
     
     [HttpDelete("DeletePhoto/{userId}")]

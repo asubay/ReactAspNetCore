@@ -75,7 +75,29 @@ When first cloning the repo or adding new dependencies, run this command.  This 
 - Install Node dependencies from package.json
 - Install .NET Core dependencies (using dotnet restore)
 
-**<h2>Usage</h2>**
+
+## Working with Swagger
+<h3>Swagger Integration</h3>
+
+The ASP.NET Core backend uses Swagger to provide a detailed API documentation and testing interface. You can access the Swagger UI at https://localhost:5000/swagger/index.html.
+
+<h3>Generating Client Code with NSwag</h3>
+You can generate client code for your React application using NSwag. Here’s how you can configure and use NSwag for JavaScript:
+
+1. Install NSwag CLI: npm install nswag
+2. Create NSwag Configuration File (nswag.json)   
+
+3. Generate Client Code:
+
+   "scripts": {
+   "generate-client": "nswag run nswag.json"
+   }
+4. Run the script:
+```bash   
+   npm run generate-client
+```
+
+## Usage
 
 After installing and running the application, you can open it in your browser at https://localhost:5000/ and start using it. On the main page, you will see weather summaries, charts, and tables with weather forecasts. To access the administration panel, click on the "Administration" link in the top menu.
 

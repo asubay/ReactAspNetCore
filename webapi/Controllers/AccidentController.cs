@@ -5,27 +5,38 @@ using webapi.Service.Abstract;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("api/accident")]
+[Route("api/[controller]")]
 public class AccidentController : ControllerBase
 {
     private readonly IAccidentService _service;
+    private readonly ILogger<AccidentController> _logger;
 
-    public AccidentController(IAccidentService service)
+    public AccidentController(IAccidentService service, ILogger<AccidentController> logger)
     {
         _service = service;
+        _logger = logger;
     }
 
     [HttpGet("GetAccidentData")]
     public async Task<IActionResult> GetAccidentData()
     {
-        string path = await _service.GetAccidentDataPath();
-        if (!string.IsNullOrEmpty(path)) {
-            if (System.IO.File.Exists(path))
-            {
-                string jsonContent = await System.IO.File.ReadAllTextAsync(path);
-                return Content(jsonContent, "application/json");
+        try
+        {
+            string path = await _service.GetAccidentDataPath();
+            if (!string.IsNullOrEmpty(path)) {
+                if (System.IO.File.Exists(path))
+                {
+                    string jsonContent = await System.IO.File.ReadAllTextAsync(path);
+                    return Content(jsonContent, "application/json");
+                }
             }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error while getting accident statistics");
+            return StatusCode(500, "Internal server error");
+        }
+        
         return NotFound("JSON file not found");
     }
     

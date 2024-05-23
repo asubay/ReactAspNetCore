@@ -6,7 +6,7 @@ using webapi.ViewModels.Weather;
 namespace webapi.Controllers;
 
 [ApiController]
-[Route("api/weatherforecast")]
+[Route("api/[controller]")]
 public class WeatherForecastController : ControllerBase
 {
     private readonly IWeatherForecastService _service;
@@ -16,6 +16,7 @@ public class WeatherForecastController : ControllerBase
         _service = service;
     }
 
+    /// <summary>Получить данные о рогнозе погоды на пять дней</summary>
     [HttpGet]
     public async Task<WeatherForecastViewModel> Get(string cityId="1520316")
     {

@@ -1,0 +1,28 @@
+{
+  "runtime": "Net80",
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "http://localhost:5000/swagger/v1/swagger.json",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "javascript": {
+      "template": "axios",
+      "className": "{controller}Client",
+      "moduleName": "reactapp",
+      "promiseType": "Promise",
+      "typeStyle": "Class",
+      "generateClientClasses": true,
+      "generateClientInterfaces": true,
+      "generateOptionalParameters": true,
+      "clientBaseClass": null,
+      "wrapDtoExceptions": false,
+      "wrapResponses": false,
+      "responseClass": "SwaggerResponse",
+      "generateResponseClasses": true,
+      "operationGenerationMode": "SingleClientFromOperationId",
+      "additionalNamespaceUsages": []
+    }
+  }
+}

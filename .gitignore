@@ -8,3 +8,5 @@
 /webapi/publish
 /webapi/forecast_deploy.sh
 /node_modules
+/*.user
+/package-lock.json

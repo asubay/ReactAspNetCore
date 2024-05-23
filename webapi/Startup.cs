@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using webapi.Service;
 using webapi.Service.Abstract;
 using Serilog;
@@ -22,25 +23,37 @@ public class Startup
         ConfigureDependencyInjection(services);
         ConfigureDatabase(services);
         
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = Configuration.GetConnectionString("Redis");
+        });
+        
         services.AddSession(options =>
         {
-            // Установка времени жизни сессии и других параметров
-            options.IdleTimeout = TimeSpan.FromMinutes(3600);
+            options.IdleTimeout = TimeSpan.FromMinutes(60);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true; 
         });
+
+        services.AddDistributedMemoryCache();
         
         services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
         ConfigureWeb(services);
+        services.AddSwaggerGen(x =>
+            x.SwaggerDoc("v1", new OpenApiInfo()
+            {
+                Title = "Demo Project",
+                Description = "Asp.Net Core with React",
+                Version = "1.0"
+            }));
     }
 
     private static void ConfigureDependencyInjection(IServiceCollection services)
     {
-        // Singletons
         services.AddSingleton<IUserIdProvider, AspNetUserIdProvider>();
-        // Generic interfaces
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IWeatherForecastService, WeatherForecastService>(); 
         services.AddScoped<IAccidentService, AccidentService>();
@@ -64,10 +77,9 @@ public class Startup
     private void ConfigureWeb(IServiceCollection services)
     {
         services.AddControllers();
-        services.AddEndpointsApiExplorer(); //используется для регистрации сервиса, который предоставляет информацию об обнаруженных конечных точках (endpoints)
+        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        services.AddDistributedMemoryCache();
-        services.AddMemoryCache(); //добавляет простое хранилище кэша в памяти приложения
+        services.AddMemoryCache();
         services.AddSignalR(); 
     }
 
@@ -96,10 +108,9 @@ public class Startup
                 await context.Response.WriteAsync("File size exceeds limit.");
                 return;
             }
-            await next(); // Передача запроса далее по конвейеру
+            await next();
         });
 
-        //app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();  
         app.UseAuthorization();

@@ -66,12 +66,16 @@ public class AuthController : ControllerBase
     [HttpGet("GetCurrentUser")]
     public async Task<ActionResult<UserInformation>> GetCurrentUser()
     {
-        var result = await _accountService.GetCurrentUserAsync();
-        if (result != null)
+        try
         {
+            var result = await _accountService.GetCurrentUserAsync();
             return Ok(result);
         }
-        return BadRequest("Authentication error: invalid credentials");
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error while getting user information");
+            return StatusCode(500, "Internal server error");
+        }
     }
     
     /// <summary>Выход из проекта</summary>
